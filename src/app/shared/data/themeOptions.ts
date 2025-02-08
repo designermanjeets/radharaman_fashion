@@ -2,8 +2,8 @@ export const themeOptionsTrendVibe = {
     "id": 1,
     "options": {
         "general": {
-            "site_title": "TrendVibe Marketplace: Where Vendors Shine Together",
-            "site_tagline": "Sell Exceptional – TrendVibe Private Limited.",
+            "site_title": "RadhaRaman Fashion Marketplace: Where Vendors Shine Together",
+            "site_tagline": "Sell Exceptional – RadhaRaman Fashion Private Limited.",
             "sticky_cart_enable": true,
             "cart_style": "cart_sidebar",
             "back_to_top_enable": false,
@@ -96,10 +96,10 @@ export const themeOptionsTrendVibe = {
             "title": null,
             "sub_title": null,
             "footer_copyright": true,
-            "copyright_content": "Copyright 2025 © TrendVibe PROJECTS PRIVATE LIMITED",
+            "copyright_content": "Copyright 2025 © RadhaRaman Fashion PROJECTS PRIVATE LIMITED",
             "footer_about": null,
             "about_address": "Property Shop No 121 Plot No 26 First Floor, Royal Arcade Road No 44 Pitam pura Near Chunmun Mall, Rani Bagh, North West Delhi, Delhi, Delhi, India, 110034",
-            "about_email": "support@TrendVibe.com",
+            "about_email": "supportz@radharamanfashion.in",
             "footer_categories": [],
             "useful_link": [
                 {
@@ -131,7 +131,7 @@ export const themeOptionsTrendVibe = {
                 }
             ],
             "support_number": "+91 9220883840",
-            "support_email": "support@TrendVibe.com",
+            "support_email": "supportz@radharamanfashion.in",
             "play_store_url": null,
             "app_store_url": null,
             "social_media_enable": true,
@@ -258,15 +258,15 @@ export const themeOptionsTrendVibe = {
                 "status": true,
                 "content_left_image_url": "/storage/3284/fashion-collection-design-shopping-graphic-words.jpg",
                 "content_right_image_url": "/storage/3285/customers-checking-out-shop.jpg",
-                "sub_title": "TrendVibe - Elevate Your Fashion Game",
+                "sub_title": "RadhaRaman Fashion - Elevate Your Fashion Game",
                 "title": "Trendy, Timeless, and Tailored for You",
-                "description": "Welcome to TrendVibe, your ultimate destination for fashion that speaks your style. Whether you're looking for the latest trends, classic elegance, or personalized fashion inspiration, we've got you covered. Discover handpicked collections, premium quality fabrics, and effortlessly chic outfits tailored to your personality. Shop with confidence and redefine your wardrobe with TrendVibe – where fashion meets innovation!",
+                "description": "Welcome to RadhaRaman Fashion, your ultimate destination for fashion that speaks your style. Whether you're looking for the latest trends, classic elegance, or personalized fashion inspiration, we've got you covered. Discover handpicked collections, premium quality fabrics, and effortlessly chic outfits tailored to your personality. Shop with confidence and redefine your wardrobe with TrendVibe – where fashion meets innovation!",
                 "futures": []
             },
             "clients": {
                 "status": true,
                 "sub_title": "Real Reviews, Genuine Experiences, Unmatched Style",
-                "title": "What Our Clients Say About TrendVibe",
+                "title": "What Our Clients Say About RadhaRaman Fashion",
                 "content": []
             },
             "team": {
