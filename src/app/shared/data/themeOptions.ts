@@ -260,7 +260,7 @@ export const themeOptionsTrendVibe = {
                 "content_right_image_url": "/storage/3285/customers-checking-out-shop.jpg",
                 "sub_title": "RadhaRaman Fashion - Elevate Your Fashion Game",
                 "title": "Trendy, Timeless, and Tailored for You",
-                "description": "Welcome to RadhaRaman Fashion, your ultimate destination for fashion that speaks your style. Whether you're looking for the latest trends, classic elegance, or personalized fashion inspiration, we've got you covered. Discover handpicked collections, premium quality fabrics, and effortlessly chic outfits tailored to your personality. Shop with confidence and redefine your wardrobe with TrendVibe – where fashion meets innovation!",
+                "description": "Welcome to RadhaRaman Fashion, your ultimate destination for fashion that speaks your style. Whether you're looking for the latest trends, classic elegance, or personalized fashion inspiration, we've got you covered. Discover handpicked collections, premium quality fabrics, and effortlessly chic outfits tailored to your personality. Shop with confidence and redefine your wardrobe with RadhaRaman Fashion – where fashion meets innovation!",
                 "futures": []
             },
             "clients": {
