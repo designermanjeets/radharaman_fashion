@@ -186,3 +186,17 @@ header .delivery-login-box .delivery-icon i {
 h6.byers {
   display: none !important;
 }
+header.active .sticky-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ffffff;
+  color: #222222;
+  box-shadow: 0 8px 10px rgba(34, 34, 34, 0.05);
+  z-index: 3;
+  padding: 7px 0;
+}
+header .top-nav {
+  padding: 7px 0;
+}
