@@ -44,6 +44,7 @@ export class BasicProductBoxComponent {
     });
   }
 
+  
   addToCart(product: Product, qty: number) {
     const params: CartAddOrUpdate = {
       id: this.cartItem ? this.cartItem.id : null,
@@ -77,5 +78,6 @@ export class BasicProductBoxComponent {
       window.open(link, "_blank");
     }
   }
+
 
 }
