@@ -2,14 +2,14 @@ export const themeOptionsTrendVibe = {
     "id": 1,
     "options": {
         "general": {
-            "site_title": "RadhaRaman Fashion Marketplace: Where Vendors Shine Together",
-            "site_tagline": "Sell Exceptional – RadhaRaman Fashion Private Limited.",
+            "site_title": "RADHA RAMAN FASHION: Where Vendors Shine Together",
+            "site_tagline": "Sell Exceptional – RADHA RAMAN SPIRITECH Private Limited.",
             "sticky_cart_enable": true,
             "cart_style": "cart_sidebar",
-            "back_to_top_enable": false,
+            "back_to_top_enable": true,
             "language_direction": "ltr",
-            "primary_color": "#000000",
-            "secondary_color": "#000000",
+            "primary_color": "#D99F46",
+            "secondary_color": "#D99F46",
             "mode": "light",
             "celebration_effect": true,
             "seller_register_url": null,
@@ -31,8 +31,8 @@ export const themeOptionsTrendVibe = {
                 "disk": "public",
                 "created_by_id": 1,
                 "created_at": "2025-01-21T07:26:35.000000Z",
-                "asset_url": "../assets/images/TrendVibe-fav.png",
-                "original_url": "../assets/images/TrendVibe-fav.png"
+                "asset_url": "../assets/images/radharaman-favicon.png",
+                "original_url": "../assets/images/radharaman-favicon.png"
             },
             "header_logo": {
                 "id": 2153,
@@ -42,8 +42,8 @@ export const themeOptionsTrendVibe = {
                 "disk": "public",
                 "created_by_id": 1,
                 "created_at": "2025-01-21T07:25:43.000000Z",
-                "asset_url": "../assets/images/TrendVibe.png",
-                "original_url": "../assets/images/TrendVibe.png"
+                "asset_url": "../assets/images/RADHARAMAN-LOGO.png",
+                "original_url": "../assets/images/RADHARAMAN-LOGO.png"
             },
             "footer_logo": {
                 "id": 2153,
@@ -53,8 +53,8 @@ export const themeOptionsTrendVibe = {
                 "disk": "public",
                 "created_by_id": 1,
                 "created_at": "2025-01-21T07:25:43.000000Z",
-                "asset_url": "../assets/images/TrendVibe.png",
-                "original_url": "../assets/images/TrendVibe.png"
+                "asset_url": "../assets/images/RADHARAMAN-LOGO.png",
+                "original_url": "../assets/images/RADHARAMAN-LOGO.png"
             }
         },
         "header": {
@@ -96,9 +96,9 @@ export const themeOptionsTrendVibe = {
             "title": null,
             "sub_title": null,
             "footer_copyright": true,
-            "copyright_content": "Copyright 2025 © RadhaRaman Fashion PROJECTS PRIVATE LIMITED",
+            "copyright_content": "Copyright 2025 © RADHA RAMAN SPIRITECH PRIVATE LIMITED",
             "footer_about": null,
-            "about_address": "Property Shop No 121 Plot No 26 First Floor, Royal Arcade Road No 44 Pitam pura Near Chunmun Mall, Rani Bagh, North West Delhi, Delhi, Delhi, India, 110034",
+            "about_address": "UNIT NO. 303 PLOT NO. 6 GARG PLAZA LSC, SAINIK VIHAR PITAM PURA, Rani Bagh, Delhi, India, 110034",
             "about_email": "supportz@radharamanfashion.in",
             "footer_categories": [],
             "useful_link": [
@@ -258,15 +258,15 @@ export const themeOptionsTrendVibe = {
                 "status": true,
                 "content_left_image_url": "/storage/3284/fashion-collection-design-shopping-graphic-words.jpg",
                 "content_right_image_url": "/storage/3285/customers-checking-out-shop.jpg",
-                "sub_title": "RadhaRaman Fashion - Elevate Your Fashion Game",
+                "sub_title": "RADHA RAMAN SPIRITECH - Elevate Your Fashion Game",
                 "title": "Trendy, Timeless, and Tailored for You",
-                "description": "Welcome to RadhaRaman Fashion, your ultimate destination for fashion that speaks your style. Whether you're looking for the latest trends, classic elegance, or personalized fashion inspiration, we've got you covered. Discover handpicked collections, premium quality fabrics, and effortlessly chic outfits tailored to your personality. Shop with confidence and redefine your wardrobe with RadhaRaman Fashion – where fashion meets innovation!",
+                "description": "Welcome to RADHARAMAN FASHION, your ultimate destination for fashion that speaks your style. Whether you're looking for the latest trends, classic elegance, or personalized fashion inspiration, we've got you covered. Discover handpicked collections, premium quality fabrics, and effortlessly chic outfits tailored to your personality. Shop with confidence and redefine your wardrobe with RADHARAMAN FASHION – where fashion meets innovation!",
                 "futures": []
             },
             "clients": {
                 "status": true,
                 "sub_title": "Real Reviews, Genuine Experiences, Unmatched Style",
-                "title": "What Our Clients Say About RadhaRaman Fashion",
+                "title": "What Our Clients Say About RADHARAMAN FASHION",
                 "content": []
             },
             "team": {

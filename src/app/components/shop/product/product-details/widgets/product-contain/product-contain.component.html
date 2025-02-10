@@ -28,10 +28,10 @@
                 {{ (selectedVariation ? selectedVariation.discount : product.discount) }}% {{ 'Off' | translate }}
             </span>
         </h3>
-        <div class="product-rating custom-rate" *ngIf="!product?.is_external">
+        <!-- <div class="product-rating custom-rate" *ngIf="!product?.is_external">
             <ngb-rating [rate]="product.rating_count"></ngb-rating>
             <span class="review">{{ product.reviews_count }} {{ 'Review' | translate }}</span>
-        </div>
+        </div> -->
     </div>
     <div class="product-contain" *ngIf="product?.short_description">
         <p [innerHTML]="product.short_description"></p>

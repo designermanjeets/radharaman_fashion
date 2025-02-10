@@ -135,3 +135,46 @@ footer .sub-footer {
 .bg-effect {
   background-image: none;
 }
+footer.section-t-space {
+  background: #d99f464d;
+}
+footer .main-footer .footer-logo .footer-logo-contain {
+margin-top: 0px !important;
+}
+.footer-logo ul{
+  margin-top: 0px !important;
+}
+ul.address.adress-two {
+  margin-top: 20px !important;
+}
+.top-nav.top-header.sticky-header {
+  background: #d99f46;
+}
+header .navbar.navbar-expand-xl .navbar-nav .nav-item > a {
+  color: #ffffff;
+}
+a.dropdown-item.nav-link:hover{
+  color: #000000 !important;
+}
+header .top-nav .navbar-top .rightside-box .right-side-menu .right-side.search-icon a {
+  padding: 0;
+  font-size: 22px;
+  color: #ffffff;
+}
+header .top-nav .navbar-top .rightside-box .right-side-menu .right-side .header-wishlist i {
+  line-height: 1;
+  font-size: 24px;
+  color: #ffffff;
+}
+header .delivery-login-box .delivery-detail h6, header .delivery-login-box .delivery-detail .h6 {
+  color: #ffffff;
+  margin-bottom: 3px;
+  max-width: 140px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+header .delivery-login-box .delivery-detail h5, header .delivery-login-box .delivery-detail .h5 {
+  font-weight: 500;
+  color: #ffffff;
+}

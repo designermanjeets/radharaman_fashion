@@ -2,8 +2,8 @@
     <div class="main-footer section-b-space">
         <div class="row g-md-4 g-3">
             <div class="col-xl-4 col-lg-4 col-sm-6">
-                <div class="footer-logo">
-                    <app-footer-logo [data]="data" [footer]="footer"></app-footer-logo>
+                <div class="footer-logo footer-first">
+                   
                     <app-footer-about [data]="data"></app-footer-about>
                 </div>
             </div>
@@ -53,8 +53,8 @@
                     data?.footer?.support_number ||
                     data?.footer?.play_store_url ||
                     data?.footer?.app_store_url">
-                <div class="footer-title contact-title">
-                    <h4>{{ 'Contact Us' | translate }}</h4>
+                <div class="footer-title contact-title footer-logo">
+                    <app-footer-logo [data]="data" [footer]="footer"></app-footer-logo>
                 </div>
                 <app-footer-contact [data]="data"></app-footer-contact>
             </div>
