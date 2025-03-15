@@ -3,7 +3,9 @@
         <div class="row g-md-4 g-3">
             <div class="col-xl-4 col-lg-4 col-sm-6">
                 <div class="footer-logo footer-first">
-                   
+                    <div class="footer-title contact-title footer-logo mb-3">
+                        <app-footer-logo [data]="data" [footer]="footer"></app-footer-logo>
+                    </div>
                     <app-footer-about [data]="data"></app-footer-about>
                 </div>
             </div>
@@ -21,6 +23,7 @@
             </div> -->
             <div class="col-xl-2 col-lg-2 col-sm-3"
                 (click)="toggle('useful_link')">
+                
                 <div class="footer-title" [class.show]="active['useful_link']">
                     <h4>{{ 'Useful Links' | translate }}</h4>
                 </div>
@@ -31,6 +34,7 @@
                         <li><a href="/term-condition">Terms and Conditions</a></li>
                         <li><a href="/shipping-delivery">Shipping + delivery</a></li>
                         <li><a href="/return-exchange">Return + Exchange</a></li>
+                        <li><a href="/contactus">Contact Us</a></li>
                         <li><a href="/page/about-us">About Us</a></li>
                      </ul>
                     <!-- No Data -->
@@ -53,9 +57,7 @@
                     data?.footer?.support_number ||
                     data?.footer?.play_store_url ||
                     data?.footer?.app_store_url">
-                <div class="footer-title contact-title footer-logo">
-                    <app-footer-logo [data]="data" [footer]="footer"></app-footer-logo>
-                </div>
+                
                 <app-footer-contact [data]="data"></app-footer-contact>
             </div>
         </div>
