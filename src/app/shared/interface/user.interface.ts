@@ -31,6 +31,7 @@ export interface User {
 }
 
 export interface UserAddress {
+    area(area: any): void;
     id: number;
     user_id: number;
     title: string;
