@@ -206,3 +206,12 @@ header .navbar.navbar-expand-xl .navbar-nav .nav-item > a {
 .footer-contact{
   margin-top: 0px !important;
 }
+#ngb-accordion-item-4-collapse .category-list li:first-child {
+  display: none;
+}
+#ngb-accordion-item-3-collapse .category-list li:first-child {
+  display: none;
+}
+#ngb-accordion-item-1-collapse .category-list li:first-child {
+  display: none;
+}

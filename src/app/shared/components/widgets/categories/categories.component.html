@@ -7,7 +7,8 @@
         <img [src]="category?.category_icon ? category?.category_icon?.original_url : 'assets/images/category.png'"
           [alt]="category?.name">
         <h5>
-          <a href="javascript:void(0)" [routerLink]="['/category', category.slug ]">{{ category?.name }}</a>
+          <a [routerLink]="['/collections']" 
+          [queryParams]="{ category: category.slug, sortBy: 'asc' }">{{ category?.name }}</a>
         </h5>
       </div>
     </li>
