@@ -73,7 +73,7 @@ export const themeOptionsTrendVibe = {
                 }
             ],
             "page_top_bar_dark": false,
-            "support_number": "+91 9220883840",
+            "support_number": "+91 7456005169",
             "today_deals": [
                 993,
                 988,
@@ -130,7 +130,7 @@ export const themeOptionsTrendVibe = {
                     "value": "wishlist"
                 }
             ],
-            "support_number": "+91 9220883840",
+            "support_number": "+91 7456005169",
             "support_email": "supportz@radharamanfashion.in",
             "play_store_url": null,
             "app_store_url": null,
