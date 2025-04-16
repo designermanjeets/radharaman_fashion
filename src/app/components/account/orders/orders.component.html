@@ -22,7 +22,9 @@
                         <td>{{ order?.total | currencySymbol }} </td>
                         <td><div class="status-{{order?.payment_status?.toLowerCase()}}"><span>{{ order?.payment_status | titleCase }}</span></div></td>
                         <td>
-                            {{ order?.payment_method?.toUpperCase() }}
+                            <span *ngIf="order?.payment_method == 'radha_cashfree'">
+                                Cash Free
+                            </span>
                         </td>
                         <td><a [routerLink]="['/account/order/details', order.order_number]"><i class="ri-eye-line"></i></a></td>
                     </tr>

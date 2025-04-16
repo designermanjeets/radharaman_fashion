@@ -114,9 +114,9 @@ export class OrderState {
     return this.orderService.placeOrder(action?.payload).pipe(
       tap({
         next: result => {
-          if((action.payload.payment_method == 'cod' || action.payload.payment_method == 'bank_transfer') && !result.is_guest) {
+          if((action.payload.payment_method == 'cod' || action.payload.payment_method == 'radha_cashfree' || action.payload.payment_method == 'bank_transfer') && !result.is_guest) {
             this.router.navigateByUrl(`/account/order/details/${result.order_number}`);
-          } else if((action.payload.payment_method == 'cod' || action.payload.payment_method == 'bank_transfer') && result.is_guest) {
+          } else if((action.payload.payment_method == 'cod' || action.payload.payment_method == 'radha_cashfree' || action.payload.payment_method == 'bank_transfer') && result.is_guest) {
             this.router.navigate([ 'order/details' ], { queryParams: { order_number: result.order_number, email_or_phone: action?.payload.email } });
           } else {
             window.open(result.url, "_self");
