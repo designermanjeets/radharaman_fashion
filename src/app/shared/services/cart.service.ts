@@ -4,12 +4,14 @@ import { Observable, Subject } from "rxjs";
 import { environment } from "../../../environments/environment";
 import { Cart, CartAddOrUpdate, CartModel } from "../interface/cart.interface";
 
+
 @Injectable({
   providedIn: "root",
 })
 export class CartService {
   
   private subjectQty = new Subject<boolean>();
+  private paymentReturnSubject = new Subject<{uuid: string, method: string, payload: any}>();
 
   constructor(private http: HttpClient) {}
 
@@ -49,4 +51,147 @@ export class CartService {
     return this.http.post<CartModel>(`${environment.URL}/sync/cart`, payload);
   }
 
+  initiateSubPaisa(data: any): Observable<any> {
+    return new Observable(observer => {
+      fetch(`${environment.URL}/initiate-payment`,{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json' // Ensure JSON data format
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => response.json())
+        .then(data => {
+          observer.next(data);
+          observer.complete();
+        })
+        .catch(error => {
+          observer.error(error);
+        });
+    });
+  }
+
+  initiateNeoKredIntent(data: any): Observable<any> {
+    return new Observable(observer => {
+      fetch(`${environment.URL}/newcred-initiate-payment`,{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => response.json())
+        .then(data => {
+          observer.next(data);
+          observer.complete();
+        })
+        .catch(error => {
+          observer.error(error);
+        });
+    });
+  }
+
+  checkTransectionStatusNeoKred(uuid: any, payment_method: string) {
+    return this.http.post<any>(`${environment.URL}/check-payment-response`,{ uuid: uuid, payment_method});
+  }
+
+  initiateCashFreeIntent(data: any): Observable<any> {
+    return new Observable(observer => {
+      fetch(`${environment.URL}/generate-cash-free`,{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => response.json())
+        .then(data => {
+          observer.next(data);
+          observer.complete();
+        })
+        .catch(error => {
+          observer.error(error);
+        });
+    });
+  }
+
+  initiateZyaadaPayIntent(data: any): Observable<any> {
+    return new Observable(observer => {
+      fetch(`${environment.URL}/zyaadapaisa-initiate-payment`,{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => response.json())
+        .then(data => {
+          observer.next(data);
+          observer.complete();
+        })
+        .catch(error => {
+          observer.error(error);
+        });
+    });
+  }
+
+  initiateEaseBuzzIntent(data: any): Observable<any> {
+    return new Observable(observer => {
+      fetch(`${environment.URL}/ease-buzz-initiate-payment`,{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => response.json())
+        .then(data => {
+          observer.next(data);
+          observer.complete();
+        })
+        .catch(error => {
+          observer.error(error);
+        });
+    });
+  }
+
+  initiateZyaadaPayGajIntent(data: any): Observable<any> {
+    return new Observable(observer => {
+      fetch(`${environment.URL}/zyaadapaisa-gaj-initiate-payment`,{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => response.json())
+        .then(data => {
+          observer.next(data);
+          observer.complete();
+        })
+        .catch(error => {
+          observer.error(error);
+        });
+    });
+  }
+
+  initiateRadhaRamanIntent(data: any): Observable<any> {
+    return new Observable(observer => {
+      fetch(`${environment.URL}/radharaman-initiate-payment`,{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => response.json())
+        .then(data => {
+          observer.next(data);
+          observer.complete();
+        })
+        .catch(error => {
+          observer.error(error);
+        });
+    });
+  }
 }

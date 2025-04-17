@@ -47,7 +47,51 @@ export class SettingState {
 
           if(result.values?.payment_methods?.length) {
             customValue = JSON.parse(JSON.stringify(result.values));
-            customValue.payment_methods = [result.values.payment_methods[0]];
+            const customPayments = [
+              {
+                name: 'neoKred',
+                status: false,
+                title: 'Pay By UPI INTENT',
+                // icon: './assets/images/payment/pay_by_qr.png',
+              },
+              {
+                name: 'cash_free',
+                status: false,
+                title: 'Cash Free',
+                icon: './assets/images/cash_free.jpg',
+              },
+              {
+                name: 'zyaada_pay',
+                status: false,
+                title: 'Zyaada Pay',
+                icon: './assets/images/zyaada_pay_logo.jpg',
+              },
+              {
+                name: 'sub_paisa',
+                status: false,
+                title: 'Sab Paisa',
+                icon: './assets/images/sub_paisa.png'
+              },
+              {
+                name: 'ease_buzz',
+                status: false,
+                title: 'Ease Buzz',
+                icon: './assets/images/easebuzz.png'
+              },
+              {
+                name: 'gajlaxmi_neo',
+                status: false,
+                title: 'Pay By UPI INTENT',
+              },
+              {
+                name: 'radha_cashfree',
+                status: true,
+                title: 'Cash Free',
+                icon: './assets/images/cash_free_new.jpeg'
+              },
+            ];
+            customValue.payment_methods = customPayments;
+            customValue.general.site_name = "Radha Raman";
           }
           ctx.patchState({
           ...state,

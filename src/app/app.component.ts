@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, ElementRef, HostListener, Inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { NgbRatingConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Actions, Select, Store, ofActionDispatched } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -90,6 +90,19 @@ export class AppComponent {
 
     this.actions.pipe(ofActionDispatched(Logout)).subscribe(() => {
       this.router.navigate(['/auth/login']);
+    });
+    
+    this.router.events.subscribe((event) => {
+      if(event instanceof NavigationEnd) {
+        if(event.url.includes('/success') || event.url.includes('/failure')){
+          setTimeout(() => {
+            const getOrderId = localStorage.getItem('order_id');
+            if(getOrderId){
+              this.router.navigate(['/account/order/details', getOrderId]);
+            }
+          }, 500);
+        }
+      }
     });
   }
 
