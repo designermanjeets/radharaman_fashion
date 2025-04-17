@@ -99,7 +99,7 @@ export const themeOptionsTrendVibe = {
             "copyright_content": "Copyright 2025 © RADHA RAMAN SPIRITECH PRIVATE LIMITED",
             "footer_about": null,
             "about_address": "UNIT NO. 303 PLOT NO. 6 GARG PLAZA LSC, SAINIK VIHAR PITAM PURA, Rani Bagh, Delhi, India, 110034",
-            "about_email": "supportz@radharamanfashion.in",
+            "about_email": "support@radharamanfashion.in",
             "footer_categories": [],
             "useful_link": [
                 {
@@ -131,7 +131,7 @@ export const themeOptionsTrendVibe = {
                 }
             ],
             "support_number": "+91 7456005169",
-            "support_email": "supportz@radharamanfashion.in",
+            "support_email": "support@radharamanfashion.in",
             "play_store_url": null,
             "app_store_url": null,
             "social_media_enable": true,
