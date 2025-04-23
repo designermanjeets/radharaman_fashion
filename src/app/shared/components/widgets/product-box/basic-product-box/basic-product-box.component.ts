@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { NgbRatingConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
@@ -16,7 +16,7 @@ import { VariationModalComponent } from '../../modal/variation-modal/variation-m
   templateUrl: './basic-product-box.component.html',
   styleUrl: './basic-product-box.component.scss'
 })
-export class BasicProductBoxComponent {
+export class BasicProductBoxComponent implements OnInit, AfterViewInit {
 
   @Input() product: Product;
   @Input() class: string;
@@ -31,17 +31,26 @@ export class BasicProductBoxComponent {
   public currentDate: number | null;
   public saleStartDate: number | null;
 
-  constructor(private store: Store,
-    config: NgbRatingConfig) {
+  constructor(
+    private store: Store,
+    config: NgbRatingConfig,
+    private cdRef: ChangeDetectorRef
+  ) {
 		config.max = 5;
 		config.readonly = true;
 	}
 
   ngOnInit() {
-    this.product.rating_count = Math.floor(Math.random() * 3) + 3;
     this.cartItem$.subscribe(items => {
       this.cartItem = items.find(item => item.product.id == this.product.id)!;
     });
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.product.rating_count = Math.floor(Math.random() * 3) + 3;
+    }, 500);
+    this.cdRef.detectChanges();
   }
 
   
