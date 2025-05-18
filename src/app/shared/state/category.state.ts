@@ -4,6 +4,7 @@ import { tap } from "rxjs";
 import { GetCategories, GetCategoryBySlug, GetSearchByCategory } from "../action/category.action";
 import { Category } from "../../shared/interface/category.interface";
 import { CategoryService } from "../services/category.service";
+import { CategoryOptions } from "../data/CategoryOption";
 
 export class CategoryStateModel {
   category = {
@@ -52,7 +53,7 @@ export class CategoryState {
         next: result => { 
           ctx.patchState({
             category: {
-              data: result.data,
+              data: CategoryOptions,
               total: result?.total ? result?.total : result.data.length
             }
           });
