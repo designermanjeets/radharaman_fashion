@@ -135,23 +135,28 @@ export class SeoService {
   }
 
   updateDefaultSeo(){
- 
-    this.meta.updateTag({ name: 'title', content: this.themeOption?.seo?.meta_title });
-    this.meta.updateTag({ name: 'description', content: this.themeOption?.seo?.meta_description });
+    // Use theme options or fallback to default values
+    const defaultTitle = this.themeOption?.seo?.meta_title || 'Online Clothing Store | Trendy & Affordable | Radharaman';
+    const defaultDescription = this.themeOption?.seo?.meta_description || 'Buy clothes online at Radharaman Fashion – your best online clothing site for trendy and affordable fashion for men, women & activewear.';
+    const defaultImage = this.themeOption?.seo?.og_image?.original_url || 'assets/images/logo/logo.png';
+    const currentUrl = window.location.href;
+
+    this.meta.updateTag({ name: 'title', content: defaultTitle });
+    this.meta.updateTag({ name: 'description', content: defaultDescription });
 
     // Update Facebook Meta Tags
     this.meta.updateTag({ property: 'og:type', content: 'website' });
-    this.meta.updateTag({ property: 'og:url', content: this.scoContent['url'] });
-    this.meta.updateTag({ property: 'og:title', content: this.themeOption?.seo?.meta_title });
-    this.meta.updateTag({ property: 'og:description', content: this.themeOption?.seo?.meta_description });
-    this.meta.updateTag({ property: 'og:image', content: this.scoContent['og_image'] });
+    this.meta.updateTag({ property: 'og:url', content: currentUrl });
+    this.meta.updateTag({ property: 'og:title', content: defaultTitle });
+    this.meta.updateTag({ property: 'og:description', content: defaultDescription });
+    this.meta.updateTag({ property: 'og:image', content: defaultImage });
 
     // Update Twitter Meta Tags
     this.meta.updateTag({ property: 'twitter:card', content: 'summary_large_image' });
-    this.meta.updateTag({ property: 'twitter:url', content: this.scoContent['url'] });
-    this.meta.updateTag({ property: 'twitter:title', content: this.themeOption?.seo?.meta_title });
-    this.meta.updateTag({ property: 'twitter:description', content: this.themeOption?.seo?.meta_description });
-    this.meta.updateTag({ property: 'twitter:image', content: this.scoContent['og_image'] });
+    this.meta.updateTag({ property: 'twitter:url', content: currentUrl });
+    this.meta.updateTag({ property: 'twitter:title', content: defaultTitle });
+    this.meta.updateTag({ property: 'twitter:description', content: defaultDescription });
+    this.meta.updateTag({ property: 'twitter:image', content: defaultImage });
 
     if(this.themeOption?.general && this.themeOption?.general?.exit_tagline_enable){
       document.addEventListener('visibilitychange', () => {
@@ -183,8 +188,8 @@ export class SeoService {
   }
  
   customSCO(){
-    const title = this.scoContent['og_title'];
-    const description = this.scoContent['og_description'];
+    const title = this.scoContent['og_title'] || 'Online Clothing Store | Trendy & Affordable | Radharaman';
+    const description = this.scoContent['og_description'] || 'Buy clothes online at Radharaman Fashion – your best online clothing site for trendy and affordable fashion for men, women & activewear.';
 
     this.titleService.setTitle(title);
     this.meta.updateTag({ name: 'title', content: title });
