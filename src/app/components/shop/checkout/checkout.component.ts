@@ -105,16 +105,37 @@ export class CheckoutComponent {
       delivery_interval: new FormControl(),
       payment_method: new FormControl('', [Validators.required]),
       create_account: new FormControl(false),
-      name: new FormControl('', [Validators.required]),
+      name: new FormControl('', [
+        Validators.required, 
+        Validators.pattern(/^[a-zA-Z\s]+$/)
+      ]),
       email: new FormControl('', [Validators.required, Validators.email]),
       country_code: new FormControl('91', [Validators.required]),
-      phone: new FormControl('', [Validators.required]),
-      password: new FormControl(),
+      phone: new FormControl('', [
+        Validators.required, 
+        Validators.pattern(/^[0-9]{10}$/),
+        Validators.minLength(10),
+        Validators.maxLength(10)
+      ]),
+      password: new FormControl('', [
+        Validators.minLength(6)
+      ]),
       shipping_address: new FormGroup({
-        title: new FormControl('', [Validators.required]),
+        title: new FormControl('', [
+          Validators.required, 
+          Validators.pattern(/^[a-zA-Z\s]+$/)
+        ]),
         street: new FormControl('', [Validators.required]),
-        city: new FormControl('', [Validators.required]),
-        phone: new FormControl('', [Validators.required]),
+        city: new FormControl('', [
+          Validators.required, 
+          Validators.pattern(/^[a-zA-Z\s]+$/)
+        ]),
+        phone: new FormControl('', [
+          Validators.required, 
+          Validators.pattern(/^[0-9]{10}$/),
+          Validators.minLength(10),
+          Validators.maxLength(10)
+        ]),
         pincode: new FormControl('', [Validators.required]),
         country_code: new FormControl('91', [Validators.required]),
         country_id: new FormControl('', [Validators.required]),
@@ -122,10 +143,21 @@ export class CheckoutComponent {
       }),
       billing_address: new FormGroup({
         same_shipping: new FormControl(false),
-        title: new FormControl('', [Validators.required]),
+        title: new FormControl('', [
+          Validators.required, 
+          Validators.pattern(/^[a-zA-Z\s]+$/)
+        ]),
         street: new FormControl('', [Validators.required]),
-        city: new FormControl('', [Validators.required]),
-        phone: new FormControl('', [Validators.required]),
+        city: new FormControl('', [
+          Validators.required, 
+          Validators.pattern(/^[a-zA-Z\s]+$/)
+        ]),
+        phone: new FormControl('', [
+          Validators.required, 
+          Validators.pattern(/^[0-9]{10}$/),
+          Validators.minLength(10),
+          Validators.maxLength(10)
+        ]),
         pincode: new FormControl('', [Validators.required]),
         country_code: new FormControl('91', [Validators.required]),
         country_id: new FormControl('', [Validators.required]),
@@ -230,6 +262,61 @@ export class CheckoutComponent {
     this.form.get('billing_address.phone')?.valueChanges.subscribe((value) => {
       if(value && value.toString().length > 10) {
         this.form.get('billing_address.phone')?.setValue(+value.toString().slice(0, 10));
+      }
+    });
+
+    // Prevent invalid characters in name field
+    this.form.controls['name']?.valueChanges.subscribe((value) => {
+      if(value) {
+        // Remove any numbers and special characters, keep only letters and spaces
+        const cleanValue = value.replace(/[^a-zA-Z\s]/g, '');
+        if(value !== cleanValue) {
+          this.form.controls['name']?.setValue(cleanValue);
+        }
+      }
+    });
+
+    // Prevent invalid characters in shipping address title field
+    this.form.get('shipping_address.title')?.valueChanges.subscribe((value) => {
+      if(value) {
+        // Remove any numbers and special characters, keep only letters and spaces
+        const cleanValue = value.replace(/[^a-zA-Z\s]/g, '');
+        if(value !== cleanValue) {
+          this.form.get('shipping_address.title')?.setValue(cleanValue);
+        }
+      }
+    });
+
+    // Prevent invalid characters in billing address title field
+    this.form.get('billing_address.title')?.valueChanges.subscribe((value) => {
+      if(value) {
+        // Remove any numbers and special characters, keep only letters and spaces
+        const cleanValue = value.replace(/[^a-zA-Z\s]/g, '');
+        if(value !== cleanValue) {
+          this.form.get('billing_address.title')?.setValue(cleanValue);
+        }
+      }
+    });
+
+    // Prevent invalid characters in shipping address city field
+    this.form.get('shipping_address.city')?.valueChanges.subscribe((value) => {
+      if(value) {
+        // Remove any numbers and special characters, keep only letters and spaces
+        const cleanValue = value.replace(/[^a-zA-Z\s]/g, '');
+        if(value !== cleanValue) {
+          this.form.get('shipping_address.city')?.setValue(cleanValue);
+        }
+      }
+    });
+
+    // Prevent invalid characters in billing address city field
+    this.form.get('billing_address.city')?.valueChanges.subscribe((value) => {
+      if(value) {
+        // Remove any numbers and special characters, keep only letters and spaces
+        const cleanValue = value.replace(/[^a-zA-Z\s]/g, '');
+        if(value !== cleanValue) {
+          this.form.get('billing_address.city')?.setValue(cleanValue);
+        }
       }
     });
     

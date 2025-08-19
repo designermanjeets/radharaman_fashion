@@ -19,6 +19,10 @@
                                             *ngIf="form?.controls?.['name']?.touched && form.controls['name']?.errors?.['required']">
                                             {{ 'Name Is Required' | translate }}
                                         </div>
+                                        <div class="invalid-feedback"
+                                            *ngIf="form?.controls?.['name']?.touched && form.controls['name']?.errors?.['pattern']">
+                                            {{ 'Name should only contain letters and spaces' | translate }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -55,6 +59,14 @@
                                         *ngIf="form?.controls?.['phone']?.touched && form.controls['phone']?.errors?.['required']">
                                         {{ 'Phone is Required' | translate }}
                                     </div>
+                                    <div class="invalid-feedback"
+                                        *ngIf="form?.controls?.['phone']?.touched && form.controls['phone']?.errors?.['pattern']">
+                                        {{ 'Phone number must be exactly 10 digits' | translate }}
+                                    </div>
+                                    <div class="invalid-feedback"
+                                        *ngIf="form?.controls?.['phone']?.touched && form.controls['phone']?.errors?.['minlength']">
+                                        {{ 'Phone number must be at least 10 digits' | translate }}
+                                    </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="mb-3 form-box form-checkbox">
@@ -69,6 +81,10 @@
                                         <div class="invalid-feedback"
                                             *ngIf="form?.controls?.['password']?.touched && form.controls['password']?.errors?.['required']">
                                             {{ 'Password  is Required' | translate }}
+                                        </div>
+                                        <div class="invalid-feedback"
+                                            *ngIf="form?.controls?.['password']?.touched && form.controls['password']?.errors?.['minlength']">
+                                            {{ 'Password must be at least 6 characters' | translate }}
                                         </div>
                                     </div>
                                 </div>
@@ -86,6 +102,9 @@
                                             <input type="text" class="form-control" formControlName="title" id="sname" placeholder="{{ 'Enter Name' | translate }}">
                                             <div *ngIf="form.get('shipping_address.title')?.touched && form.get('shipping_address.title')?.errors?.['required']" class="invalid-feedback">
                                                 {{ 'Title is Required' | translate }}
+                                            </div>
+                                            <div *ngIf="form.get('shipping_address.title')?.touched && form.get('shipping_address.title')?.errors?.['pattern']" class="invalid-feedback">
+                                                {{ 'Title should only contain letters and spaces' | translate }}
                                             </div>
                                         </div>
                                     </div>
@@ -129,6 +148,9 @@
                                             <div *ngIf="form.get('shipping_address.city')?.touched && form.get('shipping_address.city')?.errors?.['required']" class="invalid-feedback">
                                                 {{ 'City is Required' | translate }}
                                             </div>
+                                            <div *ngIf="form.get('shipping_address.city')?.touched && form.get('shipping_address.city')?.errors?.['pattern']" class="invalid-feedback">
+                                                {{ 'City should only contain letters and spaces' | translate }}
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -160,6 +182,12 @@
                                         <div *ngIf="form.get('shipping_address.phone')?.touched && form.get('shipping_address.phone')?.errors?.['required']" class="invalid-feedback">
                                             {{ 'Phone is Required' | translate }}
                                         </div>
+                                        <div *ngIf="form.get('shipping_address.phone')?.touched && form.get('shipping_address.phone')?.errors?.['pattern']" class="invalid-feedback">
+                                            {{ 'Phone number must be exactly 10 digits' | translate }}
+                                        </div>
+                                        <div *ngIf="form.get('shipping_address.phone')?.touched && form.get('shipping_address.phone')?.errors?.['minlength']" class="invalid-feedback">
+                                            {{ 'Phone number must be at least 10 digits' | translate }}
+                                        </div>
                                     </div>
                                 </div>
                             </form>
@@ -182,6 +210,9 @@
                                             <input type="text" class="form-control" formControlName="title" id="name" placeholder="{{ 'Enter Name' | translate }}">
                                             <div *ngIf="form.get('billing_address.title')?.touched && form.get('billing_address.title')?.errors?.['required']" class="invalid-feedback">
                                                 {{ 'Title is Required' | translate }}
+                                            </div>
+                                            <div *ngIf="form.get('billing_address.title')?.touched && form.get('billing_address.title')?.errors?.['pattern']" class="invalid-feedback">
+                                                {{ 'Title should only contain letters and spaces' | translate }}
                                             </div>
                                         </div>
                                     </div>
@@ -212,10 +243,10 @@
                                             <select2 class="custom-select" [data]="(billingStates$ | async) ? (billingStates$ | async)! : []"
                                                 formControlName="state_id"
                                                 [placeholder]="'Select State' | translate">
-                                            </select2>
                                             <div *ngIf="form.get('billing_address.state_id')?.touched && form.get('billing_address.state_id')?.errors?.['required']" class="invalid-feedback">
                                                 {{ 'State is Required' | translate }}
                                             </div>
+                                          </select2>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -224,6 +255,9 @@
                                             <input type="text" class="form-control" formControlName="city" id="city" placeholder="{{ 'Enter City' | translate }}">
                                             <div *ngIf="form.get('billing_address.city')?.touched && form.get('billing_address.city')?.errors?.['required']" class="invalid-feedback">
                                                 {{ 'City is Required' | translate }}
+                                            </div>
+                                            <div *ngIf="form.get('billing_address.city')?.touched && form.get('billing_address.city')?.errors?.['pattern']" class="invalid-feedback">
+                                                {{ 'City should only contain letters and spaces' | translate }}
                                             </div>
                                         </div>
                                     </div>
@@ -255,6 +289,12 @@
                                         </div>
                                         <div *ngIf="form.get('billing_address.phone')?.touched && form.get('billing_address.phone')?.errors?.['required']" class="invalid-feedback">
                                             {{ 'Phone is Required' | translate }}
+                                        </div>
+                                        <div *ngIf="form.get('billing_address.phone')?.touched && form.get('billing_address.phone')?.errors?.['pattern']" class="invalid-feedback">
+                                            {{ 'Phone number must be exactly 10 digits' | translate }}
+                                        </div>
+                                        <div *ngIf="form.get('billing_address.phone')?.touched && form.get('billing_address.phone')?.errors?.['minlength']" class="invalid-feedback">
+                                            {{ 'Phone number must be at least 10 digits' | translate }}
                                         </div>
                                     </div>
                                 </div>
