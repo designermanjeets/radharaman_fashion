@@ -36,7 +36,11 @@ export class LoginComponent {
     private authService: AuthService
   ) {
     this.form = this.formBuilder.group({
-      email: new FormControl('', [Validators.required, Validators.email]),
+      email: new FormControl('', [
+        Validators.required, 
+        Validators.email,
+        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+      ]),
       password: new FormControl('', [Validators.required]),
       recaptcha: new FormControl(null, Validators.required)
     });
@@ -49,6 +53,20 @@ export class LoginComponent {
         this.reCaptcha = true;
       }
     });
+  }
+
+  // Get email validation errors
+  getEmailErrors(): string | null {
+    const emailControl = this.form.get('email');
+    if (emailControl?.touched && emailControl?.errors) {
+      if (emailControl.errors['required']) {
+        return 'Email Is Required';
+      }
+      if (emailControl.errors['email'] || emailControl.errors['pattern']) {
+        return 'Please Enter A Valid Email Address';
+      }
+    }
+    return null;
   }
 
   submit() {

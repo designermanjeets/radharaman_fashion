@@ -17,26 +17,42 @@
                         <form class="row g-4" [formGroup]="form" (ngSubmit)="submit()">
                             <div class="col-12">
                                 <div class="form-floating log-in-form">
-                                    <input type="name" class="form-control" id="name" id="name" formControlName="name" placeholder="{{ 'Name' | translate }}">
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="name" 
+                                           formControlName="name" 
+                                           placeholder="{{ 'Name' | translate }}"
+                                           (input)="onNameInput($event)"
+                                           (keypress)="onNameKeyPress($event)"
+                                           [class.is-invalid]="form.controls['name'].touched && form.controls['name'].errors">
                                     <label for="name">{{ 'Full Name' | translate }}</label>
-                                    <div *ngIf="form.controls['name'].touched && form.controls['name'].errors?.['required']" class="invalid-feedback">{{ 'name_is_required' | translate }}</div>
+                                    <div *ngIf="getNameErrors() !== ''" class="invalid-feedback">{{ getNameErrors() | translate }}</div>
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="form-floating log-in-form">
-                                    <input type="email" class="form-control" id="email" id="email" formControlName="email" placeholder="{{ 'Email Address' | translate}}">
+                                    <input type="email" 
+                                           class="form-control" 
+                                           id="email" 
+                                           formControlName="email" 
+                                           placeholder="{{ 'Email Address' | translate}}"
+                                           [class.is-invalid]="form.controls['email'].touched && form.controls['email'].errors">
                                     <label for="email">{{ 'Email Address' | translate}}</label>
-                                    <div *ngIf="form.controls['email'].touched && form.controls['email'].errors?.['required']" class="invalid-feedback">{{ 'Email Is Required' | translate }}</div>
-                                    <div *ngIf="form.controls['email'].touched && form.controls['email'].errors?.['email']" class="invalid-feedback">
-                                    {{ 'Invalid Email' | translate }}
-                                    </div>
+                                    <div *ngIf="getEmailErrors() !== ''" class="invalid-feedback">{{ getEmailErrors() | translate }}</div>
                                 </div>
                             </div>
                             <div class="col-12 phone-field">
                                 <div class="form-floating log-in-form">
-                                    <input type="number" class="form-control" id="phone" id="phone" formControlName="phone" placeholder="{{ 'Phone' | translate }}">
+                                    <input type="tel" 
+                                           class="form-control" 
+                                           id="phone" 
+                                           formControlName="phone" 
+                                           placeholder="{{ 'Phone' | translate }}"
+                                           maxlength="10"
+                                           (input)="onPhoneInput($event)"
+                                           [class.is-invalid]="form.controls['phone'].touched && form.controls['phone'].errors">
                                     <label for="phone">{{ 'Phone Number' | translate }}</label>
-                                    <div *ngIf="form.controls['phone'].touched && form.controls['phone'].errors?.['required']" class="invalid-feedback">{{ 'Phone Number Is Required' | translate }}</div>
+                                    <div *ngIf="getPhoneErrors() !== ''" class="invalid-feedback">{{ getPhoneErrors() | translate }}</div>
                                     <select2 class="custom-select intl-tel-input"
                                       [data]="codes"
                                       [templates]="template"

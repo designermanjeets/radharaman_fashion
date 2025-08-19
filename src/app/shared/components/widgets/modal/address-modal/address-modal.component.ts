@@ -43,6 +43,45 @@ export class AddressModalComponent {
   public filterPinCodeAreas: any;
   public checkIfPinCodeExists = true;
 
+  // Prevent invalid characters in title field
+  onTitleInput(event: any) {
+    const input = event.target;
+    const value = input.value;
+    // Remove any numbers and special characters, keep only letters and spaces
+    const cleanValue = value.replace(/[^a-zA-Z\s]/g, '');
+    
+    if (value !== cleanValue) {
+      input.value = cleanValue;
+      // Update the form control
+      this.form.patchValue({ title: cleanValue });
+    }
+  }
+
+  // Prevent invalid keys from being pressed in title field
+  onTitleKeyPress(event: KeyboardEvent) {
+    const char = String.fromCharCode(event.keyCode || event.which);
+    // Allow only letters, spaces, and backspace/delete
+    if (!/[a-zA-Z\s]/.test(char) && event.key !== 'Backspace' && event.key !== 'Delete') {
+      event.preventDefault();
+      return false;
+    }
+    return true;
+  }
+
+  // Prevent non-numeric input in phone field
+  onPhoneInput(event: any) {
+    const input = event.target;
+    const value = input.value;
+    // Remove any non-numeric characters
+    const cleanValue = value.replace(/[^0-9]/g, '');
+    
+    if (value !== cleanValue) {
+      input.value = cleanValue;
+      // Update the form control
+      this.form.patchValue({ phone: cleanValue });
+    }
+  }
+
   constructor(
     private modalService: NgbModal,
     private store: Store,
@@ -53,7 +92,10 @@ export class AddressModalComponent {
 
   ) {
     this.form = this.formBuilder.group({
-      title: new FormControl('', [Validators.required]),
+      title: new FormControl('', [
+        Validators.required,
+        Validators.pattern(/^[a-zA-Z\s]+$/)
+      ]),
       street: new FormControl('', [Validators.required]),
       state_id: new FormControl('', [Validators.required]),
       country_id: new FormControl('', [Validators.required]),
@@ -61,12 +103,28 @@ export class AddressModalComponent {
       area: new FormControl('', [Validators.required]),
       pincode: new FormControl('', [Validators.required]),
       country_code: new FormControl('91', [Validators.required]),
-      phone: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]*$/)])
+      phone: new FormControl('', [
+        Validators.required, 
+        Validators.pattern(/^[0-9]{10}$/),
+        Validators.minLength(10),
+        Validators.maxLength(10)
+      ])
     })
 
     this.form.controls['phone']?.valueChanges.subscribe((value) => {
       if(value && value.toString().length > 10) {
         this.form.controls['phone']?.setValue(+value.toString().slice(0, 10));
+      }
+    });
+
+    // Prevent invalid characters in title field
+    this.form.controls['title']?.valueChanges.subscribe((value) => {
+      if(value) {
+        // Remove any numbers and special characters, keep only letters and spaces
+        const cleanValue = value.replace(/[^a-zA-Z\s]/g, '');
+        if(value !== cleanValue) {
+          this.form.controls['title']?.setValue(cleanValue);
+        }
       }
     });
 

@@ -7,31 +7,93 @@
     <div class="row mb-3 align-items-center">
         <label for="bank_account_no" class="form-label col-xxl-2 col-lg-12 col-md-3">{{ 'Bank Account No.'| translate}}</label>
         <div class="col-xxl-10 col-lg-12 col-md-9">
-            <input type="text" class="form-control" id="bank_account_no" placeholder="{{ 'Enter bank Account Number' | translate }}" formControlName="bank_account_no" numbersOnly>
+            <input type="text" 
+                   class="form-control" 
+                   id="bank_account_no" 
+                   placeholder="{{ 'Enter bank Account Number' | translate }}" 
+                   formControlName="bank_account_no"
+                   (input)="onBankAccountInput($event)"
+                   [class.is-invalid]="form.controls['bank_account_no'].touched && form.controls['bank_account_no'].errors">
+            <div class="invalid-feedback" *ngIf="form.controls['bank_account_no'].touched && form.controls['bank_account_no'].errors?.['required']">
+                {{ 'Bank Account Number is Required' | translate }}
+            </div>
+            <div class="invalid-feedback" *ngIf="form.controls['bank_account_no'].touched && form.controls['bank_account_no'].errors?.['pattern']">
+                {{ 'Bank Account Number should only contain numbers' | translate }}
+            </div>
         </div>
     </div>
     <div class="row mb-3 align-items-center">
         <label for="bank_name" class="form-label col-xxl-2 col-lg-12 col-md-3">{{ 'Bank Name'| translate}}</label>
         <div class="col-xxl-10 col-lg-12 col-md-9">
-            <input type="text" class="form-control" id="bank_name" placeholder="{{ 'Enter Bank Name' | translate }}" formControlName="bank_name">
+            <input type="text" 
+                   class="form-control" 
+                   id="bank_name" 
+                   placeholder="{{ 'Enter Bank Name' | translate }}" 
+                   formControlName="bank_name"
+                   (input)="onBankNameInput($event)"
+                   (keypress)="onBankNameKeyPress($event)"
+                   [class.is-invalid]="form.controls['bank_name'].touched && form.controls['bank_name'].errors">
+            <div class="invalid-feedback" *ngIf="form.controls['bank_name'].touched && form.controls['bank_name'].errors?.['required']">
+                {{ 'Bank Name is Required' | translate }}
+            </div>
+            <div class="invalid-feedback" *ngIf="form.controls['bank_name'].touched && form.controls['bank_name'].errors?.['pattern']">
+                {{ 'Bank Name should only contain letters and spaces' | translate }}
+            </div>
         </div>
     </div>
     <div class="row mb-3 align-items-center">
         <label for="bank_holder_name" class="form-label col-xxl-2 col-lg-12 col-md-3">{{ 'Holder Name'| translate}}</label>
         <div class="col-xxl-10 col-lg-12 col-md-9">
-            <input type="text" class="form-control" id="bank_holder_name" placeholder="{{ 'Enter Bank Holder Name' | translate }}" formControlName="bank_holder_name">
+            <input type="text" 
+                   class="form-control" 
+                   id="bank_holder_name" 
+                   placeholder="{{ 'Enter Bank Holder Name' | translate }}" 
+                   formControlName="bank_holder_name"
+                   (input)="onHolderNameInput($event)"
+                   (keypress)="onHolderNameKeyPress($event)"
+                   [class.is-invalid]="form.controls['bank_holder_name'].touched && form.controls['bank_holder_name'].errors">
+            <div class="invalid-feedback" *ngIf="form.controls['bank_holder_name'].touched && form.controls['bank_holder_name'].errors?.['required']">
+                {{ 'Holder Name is Required' | translate }}
+            </div>
+            <div class="invalid-feedback" *ngIf="form.controls['bank_holder_name'].touched && form.controls['bank_holder_name'].errors?.['pattern']">
+                {{ 'Holder Name should only contain letters and spaces' | translate }}
+            </div>
         </div>
     </div>
     <div class="row mb-3 align-items-center">
         <label for="swift" class="form-label col-xxl-2 col-lg-12 col-md-3">{{ 'Swift'| translate}}</label>
         <div class="col-xxl-10 col-lg-12 col-md-9">
-            <input type="text" class="form-control" id="swift" placeholder="{{ 'Enter Swift' | translate }}" formControlName="swift">
+            <input type="text" 
+                   class="form-control" 
+                   id="swift" 
+                   placeholder="{{ 'Enter Swift' | translate }}" 
+                   formControlName="swift"
+                   (input)="onSwiftIfscInput($event, 'swift')"
+                   [class.is-invalid]="form.controls['swift'].touched && form.controls['swift'].errors">
+            <div class="invalid-feedback" *ngIf="form.controls['swift'].touched && form.controls['swift'].errors?.['required']">
+                {{ 'SWIFT Code is Required' | translate }}
+            </div>
+            <div class="invalid-feedback" *ngIf="form.controls['swift'].touched && form.controls['swift'].errors?.['pattern']">
+                {{ 'SWIFT Code should only contain uppercase letters and numbers' | translate }}
+            </div>
         </div>
     </div>
     <div class="row mb-3 align-items-center">
         <label for="ifsc" class="form-label col-xxl-2 col-lg-12 col-md-3">{{ 'IFSC'| translate}}</label>
         <div class="col-xxl-10 col-lg-12 col-md-9">
-            <input type="text" class="form-control" id="ifsc" placeholder="{{ 'Enter IFSC' | translate }}" formControlName="ifsc">
+            <input type="text" 
+                   class="form-control" 
+                   id="ifsc" 
+                   placeholder="{{ 'Enter IFSC' | translate }}" 
+                   formControlName="ifsc"
+                   (input)="onSwiftIfscInput($event, 'ifsc')"
+                   [class.is-invalid]="form.controls['ifsc'].touched && form.controls['ifsc'].errors">
+            <div class="invalid-feedback" *ngIf="form.controls['ifsc'].touched && form.controls['ifsc'].errors?.['required']">
+                {{ 'IFSC Code is Required' | translate }}
+            </div>
+            <div class="invalid-feedback" *ngIf="form.controls['ifsc'].touched && form.controls['ifsc'].errors?.['pattern']">
+                {{ 'IFSC Code should only contain uppercase letters and numbers' | translate }}
+            </div>
         </div>
     </div>
 </form>

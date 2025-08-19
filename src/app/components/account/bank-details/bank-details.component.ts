@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { GetPaymentDetails, UpdatePaymentDetails } from '../../../shared/action/payment-details.action';
@@ -18,13 +18,28 @@ export class BankDetailsComponent {
   public form: FormGroup;
   public active = 'bank';
 
-  constructor(private store: Store) {
-    this.form = new FormGroup({
-      bank_account_no: new FormControl(),
-      bank_name: new FormControl(),
-      bank_holder_name: new FormControl(),
-      swift: new FormControl(),
-      ifsc: new FormControl(),
+  constructor(private store: Store, private formBuilder: FormBuilder) {
+    this.form = this.formBuilder.group({
+      bank_account_no: new FormControl('', [
+        Validators.required,
+        Validators.pattern(/^[0-9]+$/)
+      ]),
+      bank_name: new FormControl('', [
+        Validators.required,
+        Validators.pattern(/^[a-zA-Z\s]+$/)
+      ]),
+      bank_holder_name: new FormControl('', [
+        Validators.required,
+        Validators.pattern(/^[a-zA-Z\s]+$/)
+      ]),
+      swift: new FormControl('', [
+        Validators.required,
+        Validators.pattern(/^[A-Z0-9]+$/)
+      ]),
+      ifsc: new FormControl('', [
+        Validators.required,
+        Validators.pattern(/^[A-Z0-9]+$/)
+      ]),
       paypal_email: new FormControl('', [Validators.email]),
     });
   }
@@ -41,6 +56,84 @@ export class BankDetailsComponent {
         paypal_email: paymentDetails?.paypal_email
       })
     });
+  }
+
+  // Prevent non-numeric input in bank account number field
+  onBankAccountInput(event: any) {
+    const input = event.target;
+    const value = input.value;
+    // Remove any non-numeric characters
+    const cleanValue = value.replace(/[^0-9]/g, '');
+    
+    if (value !== cleanValue) {
+      input.value = cleanValue;
+      // Update the form control
+      this.form.patchValue({ bank_account_no: cleanValue });
+    }
+  }
+
+  // Prevent invalid characters in bank name field
+  onBankNameInput(event: any) {
+    const input = event.target;
+    const value = input.value;
+    // Remove any numbers and special characters, keep only letters and spaces
+    const cleanValue = value.replace(/[^a-zA-Z\s]/g, '');
+    
+    if (value !== cleanValue) {
+      input.value = cleanValue;
+      // Update the form control
+      this.form.patchValue({ bank_name: cleanValue });
+    }
+  }
+
+  // Prevent invalid keys from being pressed in bank name field
+  onBankNameKeyPress(event: KeyboardEvent) {
+    const char = String.fromCharCode(event.keyCode || event.which);
+    // Allow only letters, spaces, and backspace/delete
+    if (!/[a-zA-Z\s]/.test(char) && event.key !== 'Backspace' && event.key !== 'Delete') {
+      event.preventDefault();
+      return false;
+    }
+    return true;
+  }
+
+  // Prevent invalid characters in holder name field
+  onHolderNameInput(event: any) {
+    const input = event.target;
+    const value = input.value;
+    // Remove any numbers and special characters, keep only letters and spaces
+    const cleanValue = value.replace(/[^a-zA-Z\s]/g, '');
+    
+    if (value !== cleanValue) {
+      input.value = cleanValue;
+      // Update the form control
+      this.form.patchValue({ bank_holder_name: cleanValue });
+    }
+  }
+
+  // Prevent invalid keys from being pressed in holder name field
+  onHolderNameKeyPress(event: KeyboardEvent) {
+    const char = String.fromCharCode(event.keyCode || event.which);
+    // Allow only letters, spaces, and backspace/delete
+    if (!/[a-zA-Z\s]/.test(char) && event.key !== 'Backspace' && event.key !== 'Delete') {
+      event.preventDefault();
+      return false;
+    }
+    return true;
+  }
+
+  // Prevent invalid characters in SWIFT/IFSC fields
+  onSwiftIfscInput(event: any, fieldName: string) {
+    const input = event.target;
+    const value = input.value;
+    // Remove any non-alphanumeric characters, keep only uppercase letters and numbers
+    const cleanValue = value.replace(/[^A-Z0-9]/g, '').toUpperCase();
+    
+    if (value !== cleanValue) {
+      input.value = cleanValue;
+      // Update the form control
+      this.form.patchValue({ [fieldName]: cleanValue });
+    }
   }
 
   submit(){    

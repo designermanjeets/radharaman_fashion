@@ -12,11 +12,21 @@
         <div class="col-12">
           <div class="">
             <label class="form-label" for="pname">{{ 'Title' | translate }}</label>
-            <input class="form-control" id="title" type="text" placeholder="{{ 'Enter Title' | translate }}"
-              formControlName="title" />
+            <input class="form-control" 
+                   id="title" 
+                   type="text" 
+                   placeholder="{{ 'Enter Title' | translate }}"
+                   formControlName="title"
+                   (input)="onTitleInput($event)"
+                   (keypress)="onTitleKeyPress($event)"
+                   [class.is-invalid]="form.controls['title'].touched && form.controls['title'].errors" />
             <div class="invalid-feedback"
               *ngIf="form?.controls?.['title']?.touched && form.controls['title']?.errors?.['required']">
               {{ 'Title is Required' | translate }}
+            </div>
+            <div class="invalid-feedback"
+              *ngIf="form.controls['title'].touched && form.controls['title'].errors?.['pattern']">
+              {{ 'Title should only contain letters and spaces' | translate }}
             </div>
           </div>
         </div>
@@ -111,15 +121,25 @@
                 </div>
               </ng-template>
             </select2>
-            <input type="number" class="form-control intl-input-padding" maxlength="10" minlength="9" formControlName="phone"
-              placeholder="{{ 'Enter Phone' | translate }}" name="phone">
+            <input type="tel" 
+                   class="form-control intl-input-padding" 
+                   maxlength="10" 
+                   formControlName="phone"
+                   placeholder="{{ 'Enter Phone' | translate }}" 
+                   name="phone"
+                   (input)="onPhoneInput($event)"
+                   [class.is-invalid]="form.controls['phone'].touched && form.controls['phone'].errors">
             <div class="invalid-feedback"
               *ngIf="form.controls['phone'].touched && form.controls['phone'].errors?.['required']">
               {{ 'Phone Number is Required' | translate }}
             </div>
             <div class="invalid-feedback"
               *ngIf="form.controls['phone'].touched && form.controls['phone'].errors?.['pattern']">
-              {{ 'Phone Number is Invalid' | translate }}
+              {{ 'Phone number should be exactly 10 digits' | translate }}
+            </div>
+            <div class="invalid-feedback"
+              *ngIf="form.controls['phone'].touched && form.controls['phone'].errors?.['minlength']">
+              {{ 'Phone number should be exactly 10 digits' | translate }}
             </div>
           </div>
         </div>

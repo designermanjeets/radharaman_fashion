@@ -32,9 +32,21 @@ export class EditProfileModalComponent {
       this.user$.subscribe(user => {
         this.flicker = true;
         this.form = this.formBuilder.group({
-          name: new FormControl(user?.name, [Validators.required]),
-          email: new FormControl(user?.email, [Validators.required, Validators.email]),
-          phone: new FormControl(user?.phone, [Validators.required, Validators.pattern(/^[0-9]*$/)]),
+          name: new FormControl(user?.name, [
+            Validators.required, 
+            Validators.pattern(/^[a-zA-Z\s]+$/)
+          ]),
+          email: new FormControl(user?.email, [
+            Validators.required, 
+            Validators.email,
+            Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+          ]),
+          phone: new FormControl(user?.phone, [
+            Validators.required, 
+            Validators.pattern(/^[0-9]{10}$/),
+            Validators.minLength(10),
+            Validators.maxLength(10)
+          ]),
           country_code: new FormControl(user?.country_code), 
           profile_image_id: new FormControl(user?.profile_image_id),
           _method: new FormControl('PUT'),
@@ -63,6 +75,45 @@ export class EditProfileModalComponent {
       return 'by clicking on a backdrop';
     } else {
       return `with: ${reason}`;
+    }
+  }
+
+  // Prevent invalid characters in name field
+  onNameInput(event: any) {
+    const input = event.target;
+    const value = input.value;
+    // Remove any numbers and special characters, keep only letters and spaces
+    const cleanValue = value.replace(/[^a-zA-Z\s]/g, '');
+    
+    if (value !== cleanValue) {
+      input.value = cleanValue;
+      // Update the form control
+      this.form.patchValue({ name: cleanValue });
+    }
+  }
+
+  // Prevent invalid keys from being pressed in name field
+  onNameKeyPress(event: KeyboardEvent) {
+    const char = String.fromCharCode(event.keyCode || event.which);
+    // Allow only letters, spaces, and backspace/delete
+    if (!/[a-zA-Z\s]/.test(char) && event.key !== 'Backspace' && event.key !== 'Delete') {
+      event.preventDefault();
+      return false;
+    }
+    return true;
+  }
+
+  // Prevent non-numeric input in phone field
+  onPhoneInput(event: any) {
+    const input = event.target;
+    const value = input.value;
+    // Remove any non-numeric characters
+    const cleanValue = value.replace(/[^0-9]/g, '');
+    
+    if (value !== cleanValue) {
+      input.value = cleanValue;
+      // Update the form control
+      this.form.patchValue({ phone: cleanValue });
     }
   }
 
