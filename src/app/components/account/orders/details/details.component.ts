@@ -38,7 +38,10 @@ export class OrderDetailsComponent {
     this.route.params
       .pipe(
         switchMap(params => {
-            if(!params['id']) return of();
+            if(!params['id']) {
+              console.warn('No order ID provided');
+              return of(null);
+            }
             return this.store
                       .dispatch(new ViewOrder(params['id']))
                       .pipe(mergeMap(() => this.store.select(OrderState.selectedOrder)))
@@ -46,8 +49,14 @@ export class OrderDetailsComponent {
         ),
         takeUntil(this.destroy$)
       )
-      .subscribe(order => {
-        this.order = order!;
+      .subscribe({
+        next: (order) => {
+          this.order = order;
+        },
+        error: (error) => {
+          console.error('Error loading order details:', error);
+          this.order = null;
+        }
       });
   }
 

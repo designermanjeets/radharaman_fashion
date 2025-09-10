@@ -4,6 +4,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { NgbRatingConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Actions, Select, Store, ofActionDispatched } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { ThemeOptionState } from './shared/state/theme-option.state';
 import { Option } from './shared/interface/theme-option.interface';
 import { GetThemeOption } from './shared/action/theme-option.action';
@@ -39,7 +40,8 @@ export class AppComponent {
     private router: Router,
     private store: Store,
     public seoService: SeoService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private http: HttpClient
   ) {
 
     this.translate.addLangs(['de', 'en']);
@@ -96,13 +98,90 @@ export class AppComponent {
       if(event instanceof NavigationEnd) {
         if(event.url.includes('/success') || event.url.includes('/failure')){
           setTimeout(() => {
-            const getOrderId = localStorage.getItem('order_id');
-            if(getOrderId){
-              this.router.navigate(['/account/order/details', getOrderId]);
-            }
+            this.handlePaymentReturn();
           }, 500);
         }
       }
+    });
+  }
+
+  handlePaymentReturn() {
+    // Check if we have payment data in session storage
+    const paymentUuid = sessionStorage.getItem('payment_uuid');
+    const paymentMethod = sessionStorage.getItem('payment_method');
+    const paymentAction = sessionStorage.getItem('payment_action');
+    
+    if (paymentUuid && paymentMethod && paymentAction) {
+      // We have payment data, process the order
+      this.processPaymentSuccess(paymentUuid, paymentMethod, JSON.parse(paymentAction));
+    } else {
+      // Fallback to old method
+      const getOrderId = localStorage.getItem('order_id');
+      if(getOrderId){
+        this.router.navigate(['/account/order/details', getOrderId]);
+      }
+    }
+  }
+
+  processPaymentSuccess(uuid: string, paymentMethod: string, formData: any) {
+    // Import OrderService dynamically to avoid circular dependency
+    import('./shared/services/order.service').then(({ OrderService }) => {
+      const orderService = new OrderService(this.http);
+      
+      // Create order data with UUID
+      const orderData = {
+        ...formData,
+        uuid: uuid
+      };
+
+      // Place the order after successful payment
+      orderService.placeOrder(orderData).subscribe({
+        next: (result) => {
+          console.log('Order placed successfully:', result);
+          localStorage.setItem('order_id', JSON.stringify(result.order_number));
+          
+          // Clear session storage
+          sessionStorage.removeItem('payment_uuid');
+          sessionStorage.removeItem('payment_method');
+          sessionStorage.removeItem('payment_action');
+          sessionStorage.removeItem('payment_url');
+          
+          // Add a small delay to ensure proper navigation
+          setTimeout(() => {
+            // Redirect based on user type
+            if (!result.is_guest) {
+              this.router.navigateByUrl(`/account/order/details/${result.order_number}`);
+            } else {
+              this.router.navigate(['order/details'], { 
+                queryParams: { 
+                  order_number: result.order_number, 
+                  email_or_phone: formData.email 
+                } 
+              });
+            }
+          }, 100);
+        },
+        error: (err) => {
+          console.error('Error placing order:', err);
+          // Clear session storage even on error
+          sessionStorage.removeItem('payment_uuid');
+          sessionStorage.removeItem('payment_method');
+          sessionStorage.removeItem('payment_action');
+          sessionStorage.removeItem('payment_url');
+          
+          // Show error notification if available
+          if ((window as any)['NotificationService']) {
+            (window as any)['NotificationService'].showError('Error placing order. Please contact support.');
+          }
+          
+          // Redirect to checkout page on error
+          this.router.navigate(['/shop/checkout']);
+        }
+      });
+    }).catch(error => {
+      console.error('Error importing OrderService:', error);
+      // Fallback redirect
+      this.router.navigate(['/shop/checkout']);
     });
   }
 

@@ -1,7 +1,8 @@
 import { Injectable, } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { UrlTree, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 import { GetUserDetails } from './../../shared/action/account.action';
 import { AuthService } from './../../shared/services/auth.service';
 
@@ -21,28 +22,20 @@ export class CheckoutGuard {
     this.authService.redirectUrl = state.url;
 
     if(this.store.selectSnapshot(state => state.auth && state.auth.access_token)) {
-
-        this.store.dispatch(new GetUserDetails()).subscribe({
-            complete: () => {
-                return true;
-            }
-        });
-
+        // Return the observable to properly wait for GetUserDetails to complete
+        return this.store.dispatch(new GetUserDetails()).pipe(
+          map(() => true),
+          catchError(() => of(true)) // Allow access even if GetUserDetails fails
+        );
     } else {
-
         if(this.store.selectSnapshot(state => state.setting).setting.activation.guest_checkout) {
-
             // Redirect to the login page
             if(this.store.selectSnapshot(state => state.cart.is_digital_only)) {
                 return this.router.createUrlTree(['/auth/login']);
             }
-
         } else {
-
             return this.router.createUrlTree(['/auth/login']);
-
         }
-        
     }
     
     return true;

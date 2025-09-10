@@ -50,6 +50,12 @@ export class OrderDetailsComponent {
       .pipe(
         switchMap(params => {
             this.email_or_phone = params['email_or_phone'];
+            
+            if (!params['order_number'] || !params['email_or_phone']) {
+              console.warn('Missing order_number or email_or_phone parameters');
+              return of(null);
+            }
+            
             return this.store
                       .dispatch(new OrderTracking({ order_number: params['order_number'].toString(), email_or_phone: params['email_or_phone']}))
                       .pipe(mergeMap(() => this.store.select(OrderState.selectedOrder)))
@@ -57,9 +63,15 @@ export class OrderDetailsComponent {
         ),
         takeUntil(this.destroy$)
       )
-      .subscribe(order => {
-        this.order = order;
-        this.order && (this.order.consumer = order?.guest_order ? order?.guest_order : order?.consumer);
+      .subscribe({
+        next: (order) => {
+          this.order = order;
+          this.order && (this.order.consumer = order?.guest_order ? order?.guest_order : order?.consumer);
+        },
+        error: (error) => {
+          console.error('Error loading order details:', error);
+          this.order = null;
+        }
       });
   }
 

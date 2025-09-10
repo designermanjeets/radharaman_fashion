@@ -3,7 +3,7 @@ import { Store, Select } from '@ngxs/store';
 import { FormBuilder, FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Select2Data, Select2UpdateEvent } from 'ng-select2-component';
 import { Router } from '@angular/router';
-import { Observable, Subscription, map, of } from 'rxjs';
+import { Observable, Subscription, map, of, interval, switchMap, delay, takeWhile } from 'rxjs';
 import { Breadcrumb } from '../../../shared/interface/breadcrumb';
 import { AccountUser } from "../../../shared/interface/account.interface";
 import { AccountState } from '../../../shared/state/account.state';
@@ -67,6 +67,8 @@ export class CheckoutComponent {
 
   public formData!: any;
 
+  private pollingSubscription!: Subscription;
+  private pollingInterval = 5000; // Poll every 5 seconds
 
   storeData: any;
   localUserCheck: any;
@@ -331,6 +333,9 @@ export class CheckoutComponent {
   ngOnInit() {
     this.checkout$.subscribe(data => this.checkoutTotal = data);
     this.products();
+    
+    // Reset loading state when component initializes
+    this.loading = false;
   }
 
   products() {
@@ -479,10 +484,13 @@ export class CheckoutComponent {
         const starpaisaData = response.data;
 
         if (starpaisaData?.payment_url) {
-          // Store order_id in localStorage before redirect
-          localStorage.setItem('order_id', uuid);
+          // Store payment info in session storage for same-page flow
+          sessionStorage.setItem('payment_uuid', uuid);
+          sessionStorage.setItem('payment_method', payment_method);
+          sessionStorage.setItem('payment_action', JSON.stringify(this.form.value));
+          sessionStorage.setItem('payment_url', starpaisaData.payment_url);
           
-          // Redirect to external payment URL directly
+          // Open the payment page in the same tab/window
           window.location.href = starpaisaData.payment_url;
         } else {
           console.error("Invalid response: Payment link is missing.");
@@ -498,12 +506,8 @@ export class CheckoutComponent {
     }
   }
 
-  // This method is no longer needed as we redirect directly to external payment
-  // and handle the return via router events in app.component.ts
-  checkTransactionStatusStarpaisaRadha(uuid: any, action: any, paymentWindow: Window | null, payment_method: string) {
-    // Method kept for compatibility but no longer used
-    console.log('checkTransactionStatusStarpaisaRadha called but not used in direct redirect flow');
-  }
+  // This method is no longer needed for same-page payment flow
+  // checkTransactionStatusStarpaisaRadha method removed
 
   handlePaymentSuccess(response: any, action: any, uuid: string, payment_method: string) {
     if (response.status) {
@@ -555,6 +559,7 @@ export class CheckoutComponent {
   paybyNeoDone() {
     this.payByNeoStep = 0;
     this.modalService.dismissAll();
+    this.pollingSubscription.unsubscribe();
   }
 
 
@@ -632,16 +637,25 @@ export class CheckoutComponent {
 
     if(this.form.valid) {
       this.loading = true;
+      
+      // Add timeout to prevent hanging
+      const timeout = setTimeout(() => {
+        this.loading = false;
+        console.warn('Checkout request timed out');
+      }, 15000); // 15 second timeout
+      
       this.store.dispatch(new Checkout(this.form.value)).subscribe({
         next:(value) => {
           this.storeData = value;
         },
         error: (err) => {
           this.loading = false;
+          clearTimeout(timeout);
           throw new Error(err);
         },
         complete: () => {
           this.loading = false;
+          clearTimeout(timeout);
         }
       });
     } else {
@@ -707,6 +721,7 @@ export class CheckoutComponent {
     // this.store.dispatch(new Clear());
     this.store.dispatch(new ClearCart());
     this.form.reset();
+    this.pollingSubscription && this.pollingSubscription.unsubscribe();
   }
   
 }

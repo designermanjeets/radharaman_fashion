@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
-import { tap } from "rxjs";
+import { tap, catchError } from "rxjs/operators";
+import { Observable, of } from "rxjs";
 import { GetOrders, ViewOrder, Checkout, PlaceOrder, RePayment, OrderTracking, DownloadInvoice } from "../action/order.action";
 import { Order, OrderCheckout } from "../interface/order.interface";
 import { OrderService } from "../services/order.service";
@@ -72,6 +73,14 @@ export class OrderState {
   @Action(ViewOrder)
   viewOrder(ctx: StateContext<OrderStateModel>, { id }: ViewOrder) {
     this.orderService.skeletonLoader = true;
+    
+    // Add timeout to prevent hanging requests
+    const timeout$ = new Observable(observer => {
+      setTimeout(() => {
+        observer.error(new Error('View order request timed out'));
+      }, 15000); // 15 second timeout
+    });
+    
     return this.orderService.viewOrder(id).pipe(
       tap({
         next: result => {
@@ -82,11 +91,23 @@ export class OrderState {
           });
         },
         error: err => {
-          throw new Error(err?.error?.message);
+          console.error('View order error:', err);
+          // Set selectedOrder to null on error
+          const state = ctx.getState();
+          ctx.patchState({
+            ...state,
+            selectedOrder: null
+          });
+          throw new Error(err?.error?.message || 'Failed to load order details');
         },
         complete: () => {
           this.orderService.skeletonLoader = false;
         }
+      }),
+      catchError(error => {
+        this.orderService.skeletonLoader = false;
+        console.error('View order failed:', error);
+        return of(null);
       })
     );
   }
@@ -152,6 +173,15 @@ export class OrderState {
   @Action(OrderTracking)
   orderTracking(ctx: StateContext<OrderStateModel>, action: OrderTracking) {
     this.notificationService.notification = false;
+    this.orderService.skeletonLoader = true;
+    
+    // Add timeout to prevent hanging requests
+    const timeout$ = new Observable(observer => {
+      setTimeout(() => {
+        observer.error(new Error('Order tracking request timed out'));
+      }, 15000); // 15 second timeout
+    });
+    
     return this.orderService.orderTracking(action.payload).pipe(
       tap({
         next: result => {
@@ -162,8 +192,23 @@ export class OrderState {
           });
         },
         error: err => {
-          throw new Error(err?.error?.message);
+          console.error('Order tracking error:', err);
+          // Set selectedOrder to null on error
+          const state = ctx.getState();
+          ctx.patchState({
+            ...state,
+            selectedOrder: null
+          });
+          throw new Error(err?.error?.message || 'Failed to load order details');
+        },
+        complete: () => {
+          this.orderService.skeletonLoader = false;
         }
+      }),
+      catchError(error => {
+        this.orderService.skeletonLoader = false;
+        console.error('Order tracking failed:', error);
+        return of(null);
       })
     );
   }

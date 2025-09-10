@@ -1,6 +1,7 @@
 import { Component, HostListener } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
-import { Observable, filter, forkJoin } from 'rxjs';
+import { Observable, filter, forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { ThemeOptionState } from '../shared/state/theme-option.state';
 import { Option } from '../shared/interface/theme-option.interface';
 import { GetCategories } from '../shared/action/category.action';
@@ -92,11 +93,30 @@ export class LayoutComponent {
     const getProductBySearch$ = this.store.dispatch(new GetProductBySearch());
     const getPages$ = this.store.dispatch(new GetPages({ status: 1 }));
     const getMenu$ = this.store.dispatch(new GetMenu({ status: 1 }));
-    this.store.dispatch(new GetWishlist())
-    forkJoin([getCategories$, getProductBySearch$ , getPages$, getBlog$, getMenu$]).subscribe({
+    this.store.dispatch(new GetWishlist());
+    
+    // Add timeout to prevent hanging requests
+    const timeout$ = new Observable(observer => {
+      setTimeout(() => {
+        observer.next(true);
+        observer.complete();
+      }, 10000); // 10 second timeout
+    });
+    
+    forkJoin([getCategories$, getProductBySearch$, getPages$, getBlog$, getMenu$]).pipe(
+      catchError(error => {
+        console.warn('Some layout data failed to load:', error);
+        return of([]); // Return empty array on error
+      })
+    ).subscribe({
       complete: () => {
         this.themeOptionService.preloader = false;
       }
+    });
+    
+    // Fallback timeout to ensure preloader is turned off
+    timeout$.subscribe(() => {
+      this.themeOptionService.preloader = false;
     });
 
   }
