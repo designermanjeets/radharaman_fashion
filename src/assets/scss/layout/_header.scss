@@ -115,22 +115,40 @@ header {
   .delivery-login-box {
     display: flex;
     align-items: center;
-    cursor: default;
+    cursor: pointer;
     font-size: 24px;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 
     .delivery-icon {
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      
       .user-box {
         @include pseudowh($width: 40px, $height: 40px);
         border-radius: 100%;
         background-color: #f8f8f8;
         @include flex_common;
         overflow: hidden;
+        cursor: pointer;
       }
 
       i {
         color: $title-color;
-        font-size: 24px;
         cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        font-size: 24px;
 
         @include mq-max(md) {
           font-size: 20px;
@@ -5957,5 +5975,55 @@ header.header-3 {
 .p-md-custom {
   @media (max-width: 767px) {
     padding-right: 0 !important;
+  }
+}
+
+// iOS-specific fixes for touch events
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .delivery-login-box {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    
+    .delivery-icon {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      cursor: pointer;
+      
+      i {
+        -webkit-tap-highlight-color: transparent;
+        cursor: pointer;
+        pointer-events: auto;
+      }
+      
+      .user-box {
+        -webkit-tap-highlight-color: transparent;
+        cursor: pointer;
+        pointer-events: auto;
+      }
+    }
+  }
+  
+  .onhover-dropdown {
+    .delivery-login-box {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      cursor: pointer;
+    }
   }
 }
