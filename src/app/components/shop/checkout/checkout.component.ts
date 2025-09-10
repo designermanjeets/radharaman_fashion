@@ -3,7 +3,7 @@ import { Store, Select } from '@ngxs/store';
 import { FormBuilder, FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Select2Data, Select2UpdateEvent } from 'ng-select2-component';
 import { Router } from '@angular/router';
-import { Observable, Subscription, map, of, interval, switchMap, delay, takeWhile } from 'rxjs';
+import { Observable, Subscription, map, of } from 'rxjs';
 import { Breadcrumb } from '../../../shared/interface/breadcrumb';
 import { AccountUser } from "../../../shared/interface/account.interface";
 import { AccountState } from '../../../shared/state/account.state';
@@ -67,8 +67,6 @@ export class CheckoutComponent {
 
   public formData!: any;
 
-  private pollingSubscription!: Subscription;
-  private pollingInterval = 5000; // Poll every 5 seconds
 
   storeData: any;
   localUserCheck: any;
@@ -481,20 +479,11 @@ export class CheckoutComponent {
         const starpaisaData = response.data;
 
         if (starpaisaData?.payment_url) {
-          // Open the payment page in a new tab/window
-          const paymentWindow = window.open(
-            starpaisaData.payment_url, 
-            'PaymentWindow', 
-            'width=600,height=700,left=100,top=100,resizable=yes,scrollbars=yes'
-          );
-
-          if (!paymentWindow) {
-            console.error("Popup blocked. Please allow pop-ups for this site.");
-            this.notificationService.showError('Popup blocked. Please allow pop-ups for this site.');
-          } else {
-            // Start polling for payment status
-            this.checkTransactionStatusStarpaisaRadha(uuid, this.form.value, paymentWindow, payment_method);
-          }
+          // Store order_id in localStorage before redirect
+          localStorage.setItem('order_id', uuid);
+          
+          // Redirect to external payment URL directly
+          window.location.href = starpaisaData.payment_url;
         } else {
           console.error("Invalid response: Payment link is missing.");
           this.notificationService.showError('Invalid payment response. Please try again.');
@@ -509,82 +498,11 @@ export class CheckoutComponent {
     }
   }
 
+  // This method is no longer needed as we redirect directly to external payment
+  // and handle the return via router events in app.component.ts
   checkTransactionStatusStarpaisaRadha(uuid: any, action: any, paymentWindow: Window | null, payment_method: string) {
-    if (!paymentWindow) return;
-
-    let windowClosedManually = false;
-
-    // Start monitoring the payment window's URL and check if it's closed
-    const urlCheckInterval = setInterval(() => {
-        try {
-            if (paymentWindow.closed) {
-                console.log("Payment window closed manually or due to an issue.");
-                clearInterval(urlCheckInterval);
-                windowClosedManually = true;
-
-                // If closed manually, inform the frontend
-                this.handlePaymentSuccess({ status: false, reason: "Window closed manually" }, action, uuid, payment_method);
-                return;
-            }
-
-            const currentUrl = paymentWindow.location.href;
-            console.log("Current Payment Window URL:", currentUrl);
-
-            // Check if redirected to success or failure page
-            if (currentUrl.includes("success") || currentUrl.includes("failure")) {
-                console.log("Redirect detected, closing window.");
-                clearInterval(urlCheckInterval);
-                paymentWindow.close();
-
-                // Process the response
-                this.handlePaymentSuccess({ status: true, url: currentUrl }, action, uuid, payment_method);
-            }
-        } catch (error) {
-            // Catches CORS-related issues if the domain changes
-            console.warn("Unable to access payment window URL (possible CORS issue).");
-        }
-    }, 1000); // Check every second
-
-    // Continue polling for payment status
-    this.pollingSubscription = interval(this.pollingInterval)
-      .pipe(
-          switchMap(() => this.cartService.checkTransectionStatusStarpaisaRadha(uuid, payment_method)),
-          map(response => ({
-              ...response,
-              status: response.status || false
-          })),
-          delay(9999999999999), // Wait before forcing status update
-          map(response => ({
-              ...response,
-              status: true // Force status to true after delay if still false
-          })),
-          takeWhile((response: { status: boolean }) => !response.status, true)
-      )
-      .subscribe({
-          next: (response) => {
-              console.log('Payment Status:', response);
-
-              if (response.status) {
-                  this.pollingSubscription.unsubscribe(); // Stop polling
-
-                  // Close the popup window if still open
-                  if (paymentWindow && !paymentWindow.closed) {
-                      paymentWindow.close();
-                      console.log("Payment popup closed automatically.");
-                  }
-
-                  this.handlePaymentSuccess(response, action, uuid, payment_method);
-              }
-          },
-          error: (err) => {
-              console.error('Error checking payment status:', err);
-          },
-          complete: () => {
-              if (windowClosedManually) {
-                  console.log("Polling stopped: Payment window was closed manually.");
-              }
-          }
-      });
+    // Method kept for compatibility but no longer used
+    console.log('checkTransactionStatusStarpaisaRadha called but not used in direct redirect flow');
   }
 
   handlePaymentSuccess(response: any, action: any, uuid: string, payment_method: string) {
@@ -637,7 +555,6 @@ export class CheckoutComponent {
   paybyNeoDone() {
     this.payByNeoStep = 0;
     this.modalService.dismissAll();
-    this.pollingSubscription.unsubscribe();
   }
 
 
@@ -790,7 +707,6 @@ export class CheckoutComponent {
     // this.store.dispatch(new Clear());
     this.store.dispatch(new ClearCart());
     this.form.reset();
-    this.pollingSubscription && this.pollingSubscription.unsubscribe();
   }
   
 }
