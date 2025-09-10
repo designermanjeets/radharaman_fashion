@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { Logout } from '../../../../action/auth.action';
@@ -22,7 +22,7 @@ export class MyAccountComponent {
 
   @ViewChild("confirmationModal") ConfirmationModal: ConfirmationModalComponent;
 
-  constructor(private store: Store) {}
+  constructor(private store: Store, private elRef: ElementRef<HTMLElement>) {}
 
   logout() {
     this.store.dispatch(new Logout());
@@ -36,4 +36,13 @@ export class MyAccountComponent {
     this.isDropdownOpen = false;
   }
 
+  @HostListener('document:click', ['$event'])
+  @HostListener('document:touchstart', ['$event'])
+  onDocumentInteraction(event: Event) {
+    if (!this.isDropdownOpen) return;
+    const target = event.target as Node | null;
+    if (target && !this.elRef.nativeElement.contains(target)) {
+      this.closeDropdown();
+    }
+  }
 }
