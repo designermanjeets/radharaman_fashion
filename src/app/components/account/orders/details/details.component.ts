@@ -26,7 +26,7 @@ export class OrderDetailsComponent {
   private destroy$ = new Subject<void>();
   public isLogin: boolean;
 
-  public order: Order;
+  public order: Order | null = null;
 
   constructor(private store: Store,
     private route: ActivatedRoute) {
