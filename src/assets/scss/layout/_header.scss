@@ -115,36 +115,10 @@ header {
   .delivery-login-box {
     display: flex;
     align-items: center;
-    cursor: pointer;
+    cursor: default;
     font-size: 24px;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    touch-action: manipulation;
-    position: relative;
-    z-index: 10;
-
-    @media (max-width: 768px) {
-      -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
-      min-height: 44px;
-      min-width: 44px;
-    }
 
     .delivery-icon {
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      -khtml-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-      touch-action: manipulation;
-
       .user-box {
         @include pseudowh($width: 40px, $height: 40px);
         border-radius: 100%;
@@ -157,14 +131,6 @@ header {
         color: $title-color;
         font-size: 24px;
         cursor: pointer;
-        -webkit-tap-highlight-color: transparent;
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        -khtml-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        touch-action: manipulation;
 
         @include mq-max(md) {
           font-size: 20px;
@@ -1046,17 +1012,8 @@ header {
     &:hover {
       .onhover-div {
         opacity: 1;
-        top: 50px;
+        top: 10px;
         visibility: visible;
-      }
-    }
-
-    @media (max-width: 768px) {
-      &:active,
-      &.active {
-        .onhover-div {
-          transform: translateY(0);
-        }
       }
     }
 
@@ -1064,11 +1021,12 @@ header {
       z-index: 0;
       overflow: hidden;
       position: absolute;
-      top: 60px;
-      right: -10px;
+      top: 10px;
+      right: 10px;
       background-color: $white;
       z-index: 1001;
       width: 360px;
+      height: 90px;
       border-radius: 10px;
       padding: 0;
       box-shadow: -1px 0 10px 0 rgba($title-color, 0.07),
@@ -1076,21 +1034,6 @@ header {
       opacity: 0;
       transition: all 0.3s ease-in-out;
       visibility: hidden;
-
-      @media (max-width: 768px) {
-        position: fixed;
-        top: auto;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
-        border-radius: 20px 20px 0 0;
-        box-shadow: 0 -5px 20px rgba($title-color, 0.2);
-        transform: translateY(100%);
-        opacity: 1;
-        visibility: visible;
-        transition: transform 0.3s ease-in-out;
-      }
 
       html.dark & {
         box-shadow: -1px 0 10px 0 rgba(137, 137, 137, 0.05),

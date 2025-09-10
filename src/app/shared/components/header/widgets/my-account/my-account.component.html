@@ -1,6 +1,6 @@
 <!-- My Account Basic Style -->
 <div *ngIf="style == 'basic'">
-    <div class="delivery-login-box" (click)="toggleDropdown($event)" (touchstart)="toggleDropdown($event)">
+    <div class="delivery-login-box">
         <div class="delivery-icon">
             <i class="ri-user-line" *ngIf="!(isAuthenticated$ | async) else profile"></i>
             <ng-template #profile>
