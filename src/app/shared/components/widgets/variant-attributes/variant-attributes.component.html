@@ -37,7 +37,7 @@
         </ng-container>
     </ng-template>
     <ng-template #variantSimple>
-        <ul class="circle select-package {{attribute?.style}}" *ngIf="attribute?.style == 'color' else otherVariant">
+        <ul class="circle select-package {{attribute?.style}} mb-3" *ngIf="attribute?.style == 'color' else otherVariant">
             <ng-container *ngFor="let value of attribute.attribute_values">
                 <li [class.active]="variantIds.includes(value.id) && !soldOutAttributesIds.includes(value.id)"
                     [ngClass]="{ 'disabled': soldOutAttributesIds.includes(value.id) }" placement="top"

@@ -206,7 +206,17 @@
 
 .view-modal {
   .modal-dialog {
+    @include mq-max(sm) {
+      margin: 10px;
+      max-height: calc(100vh - 20px);
+    }
+
     .modal-content {
+      @include mq-max(sm) {
+        max-height: calc(100vh - 20px);
+        overflow-y: auto;
+      }
+
       .modal-header {
         .btn-close {
           @include mq-max(lg) {
@@ -273,6 +283,11 @@
         padding: calc(18px + (29 - 18) * ((100vw - 320px) / (1920 - 320)));
         border: none;
 
+        @include mq-max(sm) {
+          padding: 15px;
+          padding-bottom: 40px;
+        }
+
         .owl-carousel {
           &.owl-drag {
             .owl-item {
@@ -302,7 +317,20 @@
         }
 
         .right-sidebar-modal {
+          @include mq-max(sm) {
+            padding-bottom: 10px;
+            min-height: calc(100vh - 200px);
+            display: flex;
+            flex-direction: column;
+          }
+
           .selection-section {
+            margin-bottom: 20px;
+
+            @include mq-max(sm) {
+              margin-bottom: 25px;
+            }
+
             h4 {
               font-size: 16px;
             }
@@ -394,6 +422,11 @@
             border-bottom: 1px dashed $border-color;
             padding-bottom: 14px;
             margin-top: 14px;
+            margin-bottom: 20px;
+
+            @include mq-max(sm) {
+              margin-bottom: 25px;
+            }
 
             i {
               color: #ffb321;
@@ -419,6 +452,13 @@
 
           .modal-qty {
             width: 150px;
+            margin-top: 20px;
+
+            @include mq-max(sm) {
+              width: 100%;
+              margin-bottom: 15px;
+              margin-top: 25px;
+            }
 
             .input-group {
               background-color: #f8f8f8;
@@ -427,6 +467,12 @@
               text-align: center;
               z-index: 0;
               border: 1px solid #eee;
+
+              @include mq-max(sm) {
+                width: 100%;
+                max-width: 200px;
+                margin: 0 auto;
+              }
 
               .form-control {
                 height: auto;
@@ -509,6 +555,19 @@
             align-items: center;
             margin-top: 20px;
 
+            @include mq-max(sm) {
+              flex-direction: column;
+              gap: 15px;
+              margin-top: auto;
+              margin-bottom: 20px;
+              position: sticky;
+              bottom: 0;
+              background-color: $white;
+              padding: 15px 0 25px 0;
+              z-index: 10;
+              border-top: 1px solid #eee;
+            }
+
             .add-cart-button {
               background-color: $white;
               border: 1px solid var(--theme-color);
@@ -519,9 +578,18 @@
             .view-button {
               margin-left: 15px;
 
+              @include mq-max(sm) {
+                margin-left: 0;
+                width: 100%;
+              }
+
               body.rtl & {
                 margin-left: unset;
                 margin-right: 15px;
+
+                @include mq-max(sm) {
+                  margin-right: 0;
+                }
               }
             }
           }
