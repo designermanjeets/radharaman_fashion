@@ -1,0 +1,34 @@
+<section class="failure-page">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-8">
+        <div class="failure-card">
+          <!-- Failure Icon -->
+          <div class="failure-icon">
+            <div class="error-circle">
+              <div class="error-cross">
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Failure Message -->
+          <div class="failure-content">
+            <h2 class="failure-title">Order Unsuccessful</h2>
+            <p class="failure-message">
+              Something went wrong and your order could not be processed. 
+              You will be redirected to the order details page soon.
+            </p>
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+              <button class="btn btn-outline-secondary home-btn" (click)="redirectNow()">
+                Go to Home
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

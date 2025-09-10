@@ -358,6 +358,11 @@ License: "MIT"
 
 
 --------------------------------------------------------------------------------
+Package: @angular/router
+License: "MIT"
+
+
+--------------------------------------------------------------------------------
 Package: rxjs
 License: "Apache-2.0"
 
@@ -582,11 +587,6 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 --------------------------------------------------------------------------------
 Package: @angular/common
-License: "MIT"
-
-
---------------------------------------------------------------------------------
-Package: @angular/router
 License: "MIT"
 
 

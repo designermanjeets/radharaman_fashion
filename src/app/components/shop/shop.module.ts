@@ -98,6 +98,8 @@ import { OrderTrackingComponent } from './order-tracking/order-tracking.componen
 import { OrderDetailsComponent } from './order-details/order-details.component';
 import { CollectionBrandFilterComponent } from './collection/widgets/filter/collection-brand-filter/collection-brand-filter.component';
 import { BrandState } from '../../shared/state/brand.state';
+import { SuccessComponent } from './success/success.component';
+import { FailureComponent } from './failure/failure.component';
 
 
 @NgModule({
@@ -180,6 +182,8 @@ import { BrandState } from '../../shared/state/brand.state';
     CollectionBrandFilterComponent,
     BrandComponent,
     CategoryComponent,
+    SuccessComponent,
+    FailureComponent,
   ],
   imports: [
     CommonModule,

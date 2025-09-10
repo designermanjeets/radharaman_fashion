@@ -29,8 +29,18 @@ import { OrderDetailsComponent } from './order-details/order-details.component';
 import { BrandComponent } from './brand/brand.component';
 import { CategoryComponent } from './category/category.component';
 import { CategoryResolver } from '../../shared/resolvers/category.resolver';
+import { SuccessComponent } from './success/success.component';
+import { FailureComponent } from './failure/failure.component';
 
 const routes: Routes = [
+  {
+    path: 'success',
+    component: SuccessComponent
+  },
+  {
+    path: 'failure',
+    component: FailureComponent
+  },
   {
     path: 'cart',
     component: CartComponent

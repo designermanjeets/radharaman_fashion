@@ -115,22 +115,52 @@ header {
   .delivery-login-box {
     display: flex;
     align-items: center;
-    cursor: default;
+    cursor: pointer;
     font-size: 24px;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    position: relative;
+    z-index: 1002;
+    min-height: 44px;
+    min-width: 44px;
+    padding: 8px;
+    margin: -8px;
 
     .delivery-icon {
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      position: relative;
+      z-index: 1003;
+      
       .user-box {
         @include pseudowh($width: 40px, $height: 40px);
         border-radius: 100%;
         background-color: #f8f8f8;
         @include flex_common;
         overflow: hidden;
+        cursor: pointer;
+        position: relative;
+        z-index: 1005;
       }
 
       i {
         color: $title-color;
-        font-size: 24px;
         cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        font-size: 24px;
+        position: relative;
+        z-index: 1006;
 
         @include mq-max(md) {
           font-size: 20px;
@@ -144,6 +174,19 @@ header {
             margin-left: 0;
           }
         }
+      }
+      
+      // iOS clickable overlay
+      &::before {
+        content: '';
+        position: absolute;
+        top: -8px;
+        left: -8px;
+        right: -8px;
+        bottom: -8px;
+        z-index: 1004;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
       }
     }
 
@@ -1017,15 +1060,23 @@ header {
       }
     }
 
+    // Mobile click behavior
+    .onhover-div.show {
+      opacity: 1;
+      top: 10px;
+      visibility: visible;
+    }
+
     .onhover-div {
       z-index: 0;
       overflow: hidden;
       position: absolute;
-      top: 60px;
-      right: -10px;
+      top: 10px;
+      right: 10px;
       background-color: $white;
       z-index: 1001;
       width: 360px;
+      height: 90px;
       border-radius: 10px;
       padding: 0;
       box-shadow: -1px 0 10px 0 rgba($title-color, 0.07),
@@ -2795,7 +2846,7 @@ body.home {
   padding: 10px;
   width: 100%;
   background-color: var(--theme-color);
-  z-index: 2;
+  z-index: 9999;
   overflow: hidden;
   box-shadow: 0 -3px 10px 0px rgba($black, 0.08);
 
@@ -2852,6 +2903,8 @@ body.home {
 
       a {
         display: block;
+        pointer-events: auto;
+        cursor: pointer;
 
         img {
           display: block;
@@ -2872,6 +2925,7 @@ body.home {
           margin: 0 auto;
           font-size: calc(20px + (22 - 20) * ((100vw - 320px) / (1920 - 320)));
           color: $white;
+          pointer-events: none;
 
           &.activated {
             display: none;
@@ -2885,10 +2939,18 @@ body.home {
         span {
           display: block;
           color: rgba($white, 0.8);
+          pointer-events: none;
         }
       }
     }
   }
+}
+
+/* Ensure cart button is clickable */
+.mobile-menu li:last-child a {
+  position: relative;
+  z-index: 10000;
+  pointer-events: auto;
 }
 
 .header-2 {
@@ -5945,5 +6007,55 @@ header.header-3 {
 .p-md-custom {
   @media (max-width: 767px) {
     padding-right: 0 !important;
+  }
+}
+
+// iOS-specific fixes for touch events
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .delivery-login-box {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    
+    .delivery-icon {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      cursor: pointer;
+      
+      i {
+        -webkit-tap-highlight-color: transparent;
+        cursor: pointer;
+        pointer-events: auto;
+      }
+      
+      .user-box {
+        -webkit-tap-highlight-color: transparent;
+        cursor: pointer;
+        pointer-events: auto;
+      }
+    }
+  }
+  
+  .onhover-dropdown {
+    .delivery-login-box {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      cursor: pointer;
+    }
   }
 }
