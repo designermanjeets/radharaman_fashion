@@ -142,6 +142,20 @@
                                 <label>{{ 'Delivery Slot' | translate }}:</label>
                                   <h4>Standard Delivery | Approx 10 to 15 Days</h4>
                             </li>
+
+                            <li class="col-sm-3" *ngIf="order?.payment_method">
+                                <label>{{ 'Payment Mode' | translate }}:</label>
+                                <div class="d-flex align-items-center gap-2">
+                                    <h4>
+                                        <span *ngIf="order?.payment_method == 'starpaisa_radha'">
+                                            PAY BY UPI INTENT
+                                        </span>
+                                    </h4>
+                                </div>
+                            </li>
+
+
+                            
                             <li class="col-sm-3" *ngIf="order?.payment_method">
                                 <label>{{ 'Payment Mode' | translate }}:</label>
                                 <div class="d-flex align-items-center gap-2">
@@ -152,6 +166,12 @@
                                     </h4>
                                 </div>
                             </li>
+
+
+                           
+
+
+
                             <li class="col-sm-3" *ngIf="order?.payment_method">
                                 <label>{{ 'Payment Status' | translate }}:</label>
                                 <div class="d-flex align-items-center gap-2">

@@ -28,6 +28,22 @@
                         </td>
                         <td><a [routerLink]="['/account/order/details', order.order_number]"><i class="ri-eye-line"></i></a></td>
                     </tr>
+
+
+                    <tr *ngFor="let order of (order$ | async)?.data let i = index">
+                        <td><span class="fw-bolder">#{{order.order_number}}</span></td>
+                        <td>{{ order?.created_at | date: 'dd MMM yyyy hh:mm:a' }}</td>
+                        <td>{{ order?.total | currencySymbol }} </td>
+                        <td><div class="status-{{order?.payment_status?.toLowerCase()}}"><span>{{ order?.payment_status | titleCase }}</span></div></td>
+                        <td>
+                            <span *ngIf="order?.payment_method == 'starpaisa_radha'">
+                               PAY BY UPI INTENT
+                            </span>
+                        </td>
+                        <td><a [routerLink]="['/account/order/details', order.order_number]"><i class="ri-eye-line"></i></a></td>
+                    </tr>
+
+                    
                 </tbody>
             </table>
         </div>

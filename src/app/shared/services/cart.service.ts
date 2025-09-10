@@ -194,4 +194,45 @@ export class CartService {
         });
     });
   }
+
+  initiateStarpaisaRadhaIntent(data: any): Observable<any> {
+    return new Observable(observer => {
+      console.log('StarPaisa Radha - Sending data:', data);
+      console.log('StarPaisa Radha - URL:', `${environment.URL}/radharaman-initiate-payment-star-paisa`);
+      
+      fetch(`${environment.URL}/radharaman-initiate-payment-star-paisa`,{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => {
+          console.log('StarPaisa Radha - Response status:', response.status);
+          console.log('StarPaisa Radha - Response headers:', response.headers);
+          
+          if (!response.ok) {
+            return response.text().then(text => {
+              console.log('StarPaisa Radha - Error response body:', text);
+              throw new Error(`HTTP ${response.status}: ${text}`);
+            });
+          }
+          
+          return response.json();
+        })
+        .then(data => {
+          console.log('StarPaisa Radha - Success response:', data);
+          observer.next(data);
+          observer.complete();
+        })
+        .catch(error => {
+          console.error('StarPaisa Radha - Error:', error);
+          observer.error(error);
+        });
+    });
+  }
+
+  checkTransectionStatusStarpaisaRadha(uuid: any, payment_method: string) {
+    return this.http.post<any>(`${environment.URL}/check-payment-response`,{ uuid: uuid, payment_method});
+  }
 }

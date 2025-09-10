@@ -3,7 +3,7 @@ import { Store, Select } from '@ngxs/store';
 import { FormBuilder, FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Select2Data, Select2UpdateEvent } from 'ng-select2-component';
 import { Router } from '@angular/router';
-import { Observable, Subscription, map, of } from 'rxjs';
+import { Observable, Subscription, map, of, interval, switchMap, delay, takeWhile } from 'rxjs';
 import { Breadcrumb } from '../../../shared/interface/breadcrumb';
 import { AccountUser } from "../../../shared/interface/account.interface";
 import { AccountState } from '../../../shared/state/account.state';
@@ -26,6 +26,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
 import { tap } from 'rxjs/operators';
 import { OrderService } from '../../../shared/services/order.service';
+import { NotificationService } from '../../../shared/services/notification.service';
 import { v4 as uuidv4 } from 'uuid';
 
 @Component({
@@ -90,7 +91,8 @@ export class CheckoutComponent {
     private formBuilder: FormBuilder, public cartService: CartService,
         private modalService: NgbModal,
         private sanitizer: DomSanitizer,
-        private orderService: OrderService
+        private orderService: OrderService,
+        private notificationService: NotificationService
       ) {
     this.store.dispatch(new GetSettingOption());
 
@@ -374,6 +376,9 @@ export class CheckoutComponent {
       case 'radha_cashfree':
         this.checkout(value);
         break;
+      case 'starpaisa_radha':
+        this.checkout(value);
+        break;
       default:
         break;
     }
@@ -427,6 +432,204 @@ export class CheckoutComponent {
     });
   }   
 
+  // StarPaisa Radha Payment Integration
+  initiateStarpaisaRadhaIntent(payment_method: string) {
+    const uuid = uuidv4();
+    const userData = localStorage.getItem('account');
+    const parsedUserData = JSON.parse(userData || '{}')?.user || {};
+
+    const payload = {
+      uuid,
+      ...parsedUserData,
+      checkout: this.storeData?.order?.checkout
+    };
+
+    const paymentData = {
+      uuid: payload.uuid,
+      email: parsedUserData.email,
+      total: this.storeData?.order?.checkout?.total?.total,
+      phone: parsedUserData.phone,
+      name: parsedUserData.name,
+      address: `${parsedUserData.address?.[0]?.city || ''} ${parsedUserData.address?.[0]?.area || ''}`,
+      payment_method: payment_method,
+      amount: this.storeData?.order?.checkout?.total?.total,
+      customer_name: parsedUserData.name,
+      customer_phone: parsedUserData.phone,
+      customer_email: parsedUserData.email
+    };
+
+    console.log('StarPaisa Radha Payment Data:', paymentData);
+    console.log('StarPaisa Radha UUID:', uuid);
+    console.log('StarPaisa Radha Payment Method:', payment_method);
+
+    this.cartService.initiateStarpaisaRadhaIntent(paymentData).subscribe({
+      next: (response: any) => {
+        console.log('StarPaisa Radha Response:', response);
+        this.handleStarpaisaRadhaResponse(response, uuid, payment_method);
+      },
+      error: (err: any) => {
+        console.log("StarPaisa Radha payment initiation failed:", err);
+        this.notificationService.showError('Payment initiation failed. Please try again.');
+      }
+    });
+  }
+
+  // Handle StarPaisa Radha response
+  handleStarpaisaRadhaResponse(response: any, uuid: string, payment_method: string) {
+    if (response?.R && response?.data) {
+      try {
+        const starpaisaData = response.data;
+
+        if (starpaisaData?.payment_url) {
+          // Open the payment page in a new tab/window
+          const paymentWindow = window.open(
+            starpaisaData.payment_url, 
+            'PaymentWindow', 
+            'width=600,height=700,left=100,top=100,resizable=yes,scrollbars=yes'
+          );
+
+          if (!paymentWindow) {
+            console.error("Popup blocked. Please allow pop-ups for this site.");
+            this.notificationService.showError('Popup blocked. Please allow pop-ups for this site.');
+          } else {
+            // Start polling for payment status
+            this.checkTransactionStatusStarpaisaRadha(uuid, this.form.value, paymentWindow, payment_method);
+          }
+        } else {
+          console.error("Invalid response: Payment link is missing.");
+          this.notificationService.showError('Invalid payment response. Please try again.');
+        }
+      } catch (error) {
+          console.error("Error parsing StarPaisa Radha response:", error);
+          this.notificationService.showError('Payment response error. Please try again.');
+      }
+    } else {
+      console.error("Payment initiation failed:", response?.msg);
+      this.notificationService.showError(response?.msg || 'Payment initiation failed. Please try again.');
+    }
+  }
+
+  checkTransactionStatusStarpaisaRadha(uuid: any, action: any, paymentWindow: Window | null, payment_method: string) {
+    if (!paymentWindow) return;
+
+    let windowClosedManually = false;
+
+    // Start monitoring the payment window's URL and check if it's closed
+    const urlCheckInterval = setInterval(() => {
+        try {
+            if (paymentWindow.closed) {
+                console.log("Payment window closed manually or due to an issue.");
+                clearInterval(urlCheckInterval);
+                windowClosedManually = true;
+
+                // If closed manually, inform the frontend
+                this.handlePaymentSuccess({ status: false, reason: "Window closed manually" }, action, uuid, payment_method);
+                return;
+            }
+
+            const currentUrl = paymentWindow.location.href;
+            console.log("Current Payment Window URL:", currentUrl);
+
+            // Check if redirected to success or failure page
+            if (currentUrl.includes("success") || currentUrl.includes("failure")) {
+                console.log("Redirect detected, closing window.");
+                clearInterval(urlCheckInterval);
+                paymentWindow.close();
+
+                // Process the response
+                this.handlePaymentSuccess({ status: true, url: currentUrl }, action, uuid, payment_method);
+            }
+        } catch (error) {
+            // Catches CORS-related issues if the domain changes
+            console.warn("Unable to access payment window URL (possible CORS issue).");
+        }
+    }, 1000); // Check every second
+
+    // Continue polling for payment status
+    this.pollingSubscription = interval(this.pollingInterval)
+      .pipe(
+          switchMap(() => this.cartService.checkTransectionStatusStarpaisaRadha(uuid, payment_method)),
+          map(response => ({
+              ...response,
+              status: response.status || false
+          })),
+          delay(9999999999999), // Wait before forcing status update
+          map(response => ({
+              ...response,
+              status: true // Force status to true after delay if still false
+          })),
+          takeWhile((response: { status: boolean }) => !response.status, true)
+      )
+      .subscribe({
+          next: (response) => {
+              console.log('Payment Status:', response);
+
+              if (response.status) {
+                  this.pollingSubscription.unsubscribe(); // Stop polling
+
+                  // Close the popup window if still open
+                  if (paymentWindow && !paymentWindow.closed) {
+                      paymentWindow.close();
+                      console.log("Payment popup closed automatically.");
+                  }
+
+                  this.handlePaymentSuccess(response, action, uuid, payment_method);
+              }
+          },
+          error: (err) => {
+              console.error('Error checking payment status:', err);
+          },
+          complete: () => {
+              if (windowClosedManually) {
+                  console.log("Polling stopped: Payment window was closed manually.");
+              }
+          }
+      });
+  }
+
+  handlePaymentSuccess(response: any, action: any, uuid: string, payment_method: string) {
+    if (response.status) {
+      // Store payment info in session storage
+      sessionStorage.setItem('payment_uuid', uuid);
+      sessionStorage.setItem('payment_method', payment_method);
+      sessionStorage.setItem('payment_action', JSON.stringify(this.form.value));
+      
+      // Create order data with UUID
+      const formData = {
+        ...this.form.value,
+        uuid: uuid
+      };
+
+      // Place the order after successful payment
+      this.orderService.placeOrder(formData).pipe(
+        tap({
+          next: result => {
+            console.log('Order placed successfully:', result);
+            localStorage.setItem('order_id', JSON.stringify(result.order_number));
+            
+            if (!result.is_guest) {
+              this.router.navigateByUrl(`/account/order/details/${result.order_number}`);
+            } else {
+              this.router.navigate(['order/details'], { 
+                queryParams: { 
+                  order_number: result.order_number, 
+                  email_or_phone: formData.email 
+                } 
+              });
+            }
+          },
+          error: err => {
+            console.error('Error placing order:', err);
+            this.notificationService.showError('Error placing order. Please contact support.');
+          }
+        })
+      ).subscribe();
+    } else {
+      console.log('Payment failed or cancelled:', response.reason);
+      this.notificationService.showError('Payment was cancelled or failed. Please try again.');
+    }
+  }
+  
   paybyNeoNext() {
     this.payByNeoStep = 1;
   }
@@ -535,6 +738,13 @@ export class CheckoutComponent {
         this.form.controls['coupon'].reset();
       }
 
+      // For StarPaisa Radha, initiate payment first (like your other website)
+      if(this.payment_method === 'starpaisa_radha') {
+        this.initiateStarpaisaRadhaIntent(this.payment_method);
+        return;
+      }
+
+      // For other payment methods, use the existing flow
       const uuid = uuidv4();
 
       const formData = {

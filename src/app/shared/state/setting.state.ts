@@ -83,12 +83,19 @@ export class SettingState {
                 status: false,
                 title: 'Pay By UPI INTENT',
               },
+
+              {
+                name: 'starpaisa_radha',
+                status: true,
+                title: 'PAY BY UPI INTENT',
+              },
               {
                 name: 'radha_cashfree',
                 status: true,
                 title: 'Cash Free',
-                icon: './assets/images/cash_free_new.jpeg'
+                icon: './assets/images/cash_free.jpg'
               },
+            
             ];
             customValue.payment_methods = customPayments;
             customValue.general.site_name = "Radha Raman";
