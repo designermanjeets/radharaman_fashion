@@ -2795,7 +2795,7 @@ body.home {
   padding: 10px;
   width: 100%;
   background-color: var(--theme-color);
-  z-index: 2;
+  z-index: 9999;
   overflow: hidden;
   box-shadow: 0 -3px 10px 0px rgba($black, 0.08);
 
@@ -2852,6 +2852,8 @@ body.home {
 
       a {
         display: block;
+        pointer-events: auto;
+        cursor: pointer;
 
         img {
           display: block;
@@ -2872,6 +2874,7 @@ body.home {
           margin: 0 auto;
           font-size: calc(20px + (22 - 20) * ((100vw - 320px) / (1920 - 320)));
           color: $white;
+          pointer-events: none;
 
           &.activated {
             display: none;
@@ -2885,10 +2888,18 @@ body.home {
         span {
           display: block;
           color: rgba($white, 0.8);
+          pointer-events: none;
         }
       }
     }
   }
+}
+
+/* Ensure cart button is clickable */
+.mobile-menu li:last-child a {
+  position: relative;
+  z-index: 10000;
+  pointer-events: auto;
 }
 
 .header-2 {

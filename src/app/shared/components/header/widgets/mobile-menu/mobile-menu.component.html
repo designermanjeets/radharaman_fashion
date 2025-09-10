@@ -21,8 +21,8 @@
         <span>My Wish</span>
       </a>
     </li>
-    <li [class.active]="'cart' === active">
-      <a href="javascript:void(0)" (click)="cartToggle(true)">
+    <li [class.active]="'/cart' === active">
+      <a href="javascript:void(0)" [routerLink]="['/cart']" (click)="cartToggle(true)">
         <i class="fly-cate ri-shopping-bag-line deactivated"></i>
         <i class="fly-cate ri-shopping-bag-fill activated"></i>
         <span>Cart</span>

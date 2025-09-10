@@ -39,7 +39,10 @@ export class CartComponent {
   public cartHide: boolean = true;
 
   constructor(private store: Store, public cartService: CartService) {
-    this.themeOption$.subscribe(option => this.cartStyle = option?.general?.cart_style);
+    this.themeOption$.subscribe(option => {
+      this.cartStyle = option?.general?.cart_style;
+      console.log('Cart style set to:', this.cartStyle);
+    });
 
     // Calculation
     this.cartTotal$.subscribe(total => {
@@ -62,9 +65,15 @@ export class CartComponent {
     setTimeout(() => {
       this.cartHide = false;
     }, 1000);
+    
+    // Debug sidebar state
+    this.sidebarCartOpen$.subscribe(open => {
+      console.log('Cart sidebar open state in cart component:', open);
+    });
   }
 
   cartToggle(value: boolean) {
+    console.log('Cart component toggle called:', value);
     this.store.dispatch(new ToggleSidebarCart(value));
   }
 

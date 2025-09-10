@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { MobileMenu } from '../../../../../shared/interface/menu.interface';
-import { Store } from '@ngxs/store';
+import { Store, Select } from '@ngxs/store';
 import { ToggleSidebarCart } from '../../../../action/cart.action';
+import { CartState } from '../../../../state/cart.state';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-mobile-menu',
@@ -11,6 +13,8 @@ import { ToggleSidebarCart } from '../../../../action/cart.action';
 })
 export class MobileMenuComponent {
   public active: string = '/';
+  @Select(CartState.sidebarCartOpen) sidebarCartOpen$: Observable<boolean>;
+  
   public menuItem: MobileMenu[] = [
     {
       id: 1,
@@ -52,10 +56,19 @@ export class MobileMenuComponent {
           }
         })
       }
-    })
+    });
+    
+    // Debug cart sidebar state
+    this.sidebarCartOpen$.subscribe(open => {
+      console.log('Cart sidebar open state:', open);
+    });
   }
 
   cartToggle(value: boolean) {
+    console.log('Cart toggle clicked:', value);
+    // Set active menu to cart
+    this.activeMenu('/cart');
+    // Always dispatch the toggle action for mobile menu
     this.store.dispatch(new ToggleSidebarCart(value));
   }
 
