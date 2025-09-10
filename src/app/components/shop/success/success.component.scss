@@ -22,7 +22,7 @@
   .success-icon {
     margin-bottom: 2rem;
 
-    .checkmark-circle {
+    .info-circle {
       width: 80px;
       height: 80px;
       border-radius: 50%;
@@ -31,7 +31,7 @@
       position: relative;
       animation: scaleIn 0.5s ease-out 0.2s both;
 
-      .checkmark {
+      .info {
         position: absolute;
         top: 50%;
         left: 50%;
@@ -40,7 +40,7 @@
         height: 32px;
         border: solid white;
         border-width: 0 4px 4px 0;
-        animation: checkmarkDraw 0.3s ease-out 0.5s both;
+        animation: infoDraw 0.3s ease-out 0.5s both;
       }
     }
   }

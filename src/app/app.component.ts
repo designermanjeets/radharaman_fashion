@@ -98,7 +98,7 @@ export class AppComponent {
       if(event instanceof NavigationEnd) {
         if(event.url.includes('/success') || event.url.includes('/failure')){
           setTimeout(() => {
-            this.handlePaymentReturn();
+            // this.handlePaymentReturn();
           }, 500);
         }
       }
