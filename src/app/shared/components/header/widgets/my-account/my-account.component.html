@@ -1,6 +1,6 @@
 <!-- My Account Basic Style -->
-<div *ngIf="style == 'basic'">
-    <div class="delivery-login-box">
+<div *ngIf="style == 'basic'" class="onhover-dropdown">
+    <div class="delivery-login-box" (click)="toggleDropdown()" (touchstart)="toggleDropdown()">
         <div class="delivery-icon">
             <i class="ri-user-line" *ngIf="!(isAuthenticated$ | async) else profile"></i>
             <ng-template #profile>
@@ -18,19 +18,19 @@
             <h5>{{ 'My Account' | translate }}</h5>
         </div>
     </div>
-    <div class="onhover-div onhover-div-login">
+    <div class="onhover-div onhover-div-login" [class.show]="isDropdownOpen" (click)="$event.stopPropagation()">
         <ul class="user-box-name">
             <li class="product-box-contain" *ngIf="!(isAuthenticated$ | async)">
-                <a [routerLink]="['/auth/login']">{{ 'Login' | translate }}</a>
+                <a [routerLink]="['/auth/login']" (click)="closeDropdown()">{{ 'Login' | translate }}</a>
             </li>
             <li class="product-box-contain" *ngIf="!(isAuthenticated$ | async)">
-                <a [routerLink]="['/auth/register']">{{ 'Register' | translate }}</a>
+                <a [routerLink]="['/auth/register']" (click)="closeDropdown()">{{ 'Register' | translate }}</a>
             </li>
             <li class="product-box-contain" *ngIf="(isAuthenticated$ | async)">
-                <a [routerLink]="['/account/dashboard']"><i class="ri-user-line me-2"></i> {{ 'My Account' | translate }}</a>
+                <a [routerLink]="['/account/dashboard']" (click)="closeDropdown()"><i class="ri-user-line me-2"></i> {{ 'My Account' | translate }}</a>
             </li>
             <li class="product-box-contain" *ngIf="(isAuthenticated$ | async)">
-                <a href="javascript:void(0)" (click)="confirmationModal.openModal()"><i class="ri-logout-box-r-line me-2"></i> {{ 'Logout' | translate }}</a>
+                <a href="javascript:void(0)" (click)="confirmationModal.openModal(); closeDropdown()"><i class="ri-logout-box-r-line me-2"></i> {{ 'Logout' | translate }}</a>
             </li>
         </ul>
     </div>

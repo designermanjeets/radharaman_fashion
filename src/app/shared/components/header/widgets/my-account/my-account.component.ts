@@ -15,6 +15,7 @@ import { ConfirmationModalComponent } from '../../../widgets/modal/confirmation-
 export class MyAccountComponent {
 
   @Input() style: string = 'basic';
+  public isDropdownOpen: boolean = false;
 
   @Select(AuthState.isAuthenticated) isAuthenticated$: Observable<string>;
   @Select(AccountState.user) user$: Observable<AccountUser>;
@@ -25,6 +26,14 @@ export class MyAccountComponent {
 
   logout() {
     this.store.dispatch(new Logout());
+  }
+
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  closeDropdown() {
+    this.isDropdownOpen = false;
   }
 
 }
