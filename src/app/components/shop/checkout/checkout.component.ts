@@ -401,7 +401,7 @@ export class CheckoutComponent {
     this.cartService.initiateRadhaRamanIntent({
       uuid: payload.uuid,
       email: payload.email,
-      total: this.storeData?.order?.checkout?.total?.total,
+        total: this.checkoutTotal?.total?.total,
       phone: parsedUserData.phone,
       name: parsedUserData.name,
       address: `${parsedUserData.address?.[0]?.city || ''} ${parsedUserData.address?.[0]?.area || ''}`
@@ -450,12 +450,12 @@ export class CheckoutComponent {
     const paymentData = {
       uuid: payload.uuid,
       email: parsedUserData.email,
-      total: this.storeData?.order?.checkout?.total?.total,
+      total: this.checkoutTotal?.total?.total,
       phone: parsedUserData.phone,
       name: parsedUserData.name,
       address: `${parsedUserData.address?.[0]?.city || ''} ${parsedUserData.address?.[0]?.area || ''}`,
       payment_method: payment_method,
-      amount: this.storeData?.order?.checkout?.total?.total,
+      amount: this.checkoutTotal?.total?.total,
       customer_name: parsedUserData.name,
       customer_phone: parsedUserData.phone,
       customer_email: parsedUserData.email

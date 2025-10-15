@@ -21,14 +21,16 @@ export class GlobalErrorHandler implements ErrorHandler {
         
         if (error instanceof HttpErrorResponse) {
           // Server error
-          console.log('Server', error)
           message = errorService.getServerErrorMessage(error);
-          notifier.showError(message);
+          if(!message.includes('allCitiesList') && !message.includes('Http failure response for')) {
+            notifier.showError(message);
+          }
         } else {
           // Client Error
-          console.log('client', error)
           message = errorService.getClientErrorMessage(error);
-          // notifier.showError(message);
+          if(!message.includes('Something Went Wrong') && !message.includes('Http failure response for')) {
+            notifier.showError(message);
+          }
         }
         // Always log errors
         logger.logError(message);
