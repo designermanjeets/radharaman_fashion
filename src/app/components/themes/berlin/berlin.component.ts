@@ -10,6 +10,7 @@ import { GetStores } from '../../../shared/action/store.action';
 import { ThemeOptionState } from '../../../shared/state/theme-option.state';
 import { Option } from '../../../shared/interface/theme-option.interface';
 import { ActivatedRoute } from '@angular/router';
+import { OwlOptions } from 'ngx-owl-carousel-o';
 
 @Component({
   selector: 'app-berlin',
@@ -25,6 +26,26 @@ export class BerlinComponent {
 
   public categorySlider = data.categorySlider;
   public productSliderMargin = data.productSliderMargin;
+  
+  public bannerSliderOptions: OwlOptions = {
+    loop: true,
+    nav: false,
+    dots: true,
+    autoplay: true,
+    autoplayTimeout: 5000,
+    autoplayHoverPause: true,
+    items: 1,
+    responsive: {
+      0: {
+        items: 1,
+      },
+    },
+  };
+
+  public bannerImages = [
+    'assets/images/R 1.jpg',
+    'assets/images/R 2.jpg'
+  ];
 
   constructor(private store: Store,
     private route: ActivatedRoute,
