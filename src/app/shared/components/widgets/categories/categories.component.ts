@@ -1,8 +1,8 @@
-import { Component, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, SimpleChanges, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { Select } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Category, CategoryModel } from '../../../interface/category.interface';
 import { CategoryState } from '../../../state/category.state';
 import { AttributeService } from '../../../services/attribute.service';
@@ -12,7 +12,7 @@ import { AttributeService } from '../../../services/attribute.service';
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss']
 })
-export class CategoriesComponent {
+export class CategoriesComponent implements OnDestroy {
 
   @Select(CategoryState.category) category$: Observable<CategoryModel>;
 
@@ -29,22 +29,68 @@ export class CategoriesComponent {
 
   public categories: Category[];
   public selectedCategorySlug: string[] = [];
+  private categorySubscription: Subscription;
+  private queryParamsSubscription: Subscription;
 
   constructor(private route: ActivatedRoute,
     public attributeService: AttributeService,
     private router: Router) {
-    this.route.queryParams.subscribe(params => {
+    this.queryParamsSubscription = this.route.queryParams.subscribe(params => {
       this.selectedCategorySlug = params['category'] ? params['category'].split(',') : [];
     });
     
-    this.category$.subscribe(res => this.categories = res.data.map(category => category ));
+    this.updateCategories();
 
   }
 
-  ngOnChanges() {
-    if(this.categoryIds && this.categoryIds.length) {
-      this.category$.subscribe(res => this.categories = res.data.filter(category => this.categoryIds?.includes(category.id)));
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['categoryIds']) {
+      this.updateCategories();
     }
+  }
+
+  ngOnDestroy() {
+    if (this.categorySubscription) {
+      this.categorySubscription.unsubscribe();
+    }
+    if (this.queryParamsSubscription) {
+      this.queryParamsSubscription.unsubscribe();
+    }
+  }
+
+  private updateCategories() {
+    if (this.categorySubscription) {
+      this.categorySubscription.unsubscribe();
+    }
+    
+    this.categorySubscription = this.category$.subscribe(res => {
+      if (!res || !res.data || !Array.isArray(res.data)) {
+        this.categories = [];
+        return;
+      }
+      
+      // Handle both number (1) and boolean (true) status values
+      // Note: CategoryOption.ts has status as number (1), but interface defines it as boolean
+      let filteredCategories = res.data.filter(category => {
+        // Check for boolean true first (type-safe)
+        if (category.status === true) {
+          return true;
+        }
+        // Then check for number 1 (runtime data from CategoryOption.ts)
+        // Using type assertion since interface mismatch exists
+        const statusValue = (category as any).status;
+        return statusValue === 1 || statusValue === '1';
+      });
+      
+      if (this.categoryIds && this.categoryIds.length) {
+        // Filter by categoryIds, but always include category 69 (Cozy Winter Wear)
+        filteredCategories = filteredCategories.filter(category => 
+          this.categoryIds.includes(category.id) || category.id === 69
+        );
+      }
+      
+      this.categories = filteredCategories;
+    });
   }
 
   selectCategory(id?: number) {
