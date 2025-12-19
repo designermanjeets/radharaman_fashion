@@ -1,18 +1,62 @@
-
-<ul class="category-list custom-padding custom-height">
-    <li *ngFor="let price of prices">
-        <div class="form-check ps-0 m-0 category-list-box">
-            <input class="checkbox_animated" type="checkbox" 
-                id="price-filter{{price?.id}}"
-                [value]="price?.value"
-                [checked]="checked(price?.value!)"
-                (change)="applyFilter($event)">
-            <label class="form-check-label" for="price-filter{{price?.id}}">
-                <span class="name" *ngIf="price?.price else minMaxPrice">{{ price?.text }} {{ price?.price | currencySymbol }}</span>
-                <ng-template #minMaxPrice>
-                    <span class="name">{{ price?.minPrice | currencySymbol }} - {{ price?.maxPrice | currencySymbol }}</span>
-                </ng-template>
-            </label>
+<div class="price-range-filter custom-padding">
+  <div class="price-range-inputs">
+    <div class="price-input-group">
+      <label>{{ 'min' | translate }}</label>
+      <input 
+        type="number" 
+        class="form-control price-input" 
+        [min]="minPrice" 
+        [max]="maxPrice"
+        [(ngModel)]="selectedMinPrice"
+        (change)="onMinInputChange($event)"
+        (blur)="onMinInputChange($event)">
+    </div>
+    <div class="price-input-group">
+      <label>{{ 'max' | translate }}</label>
+      <input 
+        type="number" 
+        class="form-control price-input" 
+        [min]="minPrice" 
+        [max]="maxPrice"
+        [(ngModel)]="selectedMaxPrice"
+        (change)="onMaxInputChange($event)"
+        (blur)="onMaxInputChange($event)">
+    </div>
+  </div>
+  
+  <div class="price-range-slider">
+    <div class="slider-container">
+      <div class="slider-track">
+        <div class="slider-active-range" 
+             [style.left]="getMinPercentage() + '%'"
+             [style.width]="(getMaxPercentage() - getMinPercentage()) + '%'">
         </div>
-    </li>
-</ul>
+      </div>
+      <input 
+        type="range" 
+        class="form-range range-slider range-slider-min" 
+        [min]="minPrice" 
+        [max]="maxPrice"
+        [value]="selectedMinPrice"
+        (input)="onMinPriceChange($event)">
+      <input 
+        type="range" 
+        class="form-range range-slider range-slider-max" 
+        [min]="minPrice" 
+        [max]="maxPrice"
+        [value]="selectedMaxPrice"
+        (input)="onMaxPriceChange($event)">
+    </div>
+    <div class="price-display">
+      <span class="price-value">{{ selectedMinPrice | currencySymbol }}</span>
+      <span class="price-separator">-</span>
+      <span class="price-value">{{ selectedMaxPrice | currencySymbol }}</span>
+    </div>
+  </div>
+  
+  <div class="price-range-actions" *ngIf="selectedMinPrice !== minPrice || selectedMaxPrice !== maxPrice">
+    <button type="button" class="btn btn-sm btn-link reset-filter" (click)="resetFilter()">
+      {{ 'reset' | translate }}
+    </button>
+  </div>
+</div>
