@@ -1,5 +1,8 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, Input, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { ViewportScroller } from '@angular/common';
+import { filter, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { Params } from '../../../../../../shared/interface/core.interface';
 
 @Component({
@@ -7,7 +10,7 @@ import { Params } from '../../../../../../shared/interface/core.interface';
   templateUrl: './collection-price-filter.component.html',
   styleUrls: ['./collection-price-filter.component.scss']
 })
-export class CollectionPriceFilterComponent implements OnChanges {
+export class CollectionPriceFilterComponent implements OnChanges, OnDestroy {
 
   @Input() filter: Params;
 
@@ -16,8 +19,27 @@ export class CollectionPriceFilterComponent implements OnChanges {
   public selectedMinPrice: number = 0;
   public selectedMaxPrice: number = 15000;
 
+  private scrollPosition: [number, number] = [0, 0];
+  private shouldRestoreScroll: boolean = false;
+  private destroy$ = new Subject<void>();
+
   constructor(private route: ActivatedRoute,
-    private router: Router) {
+    private router: Router,
+    private viewportScroller: ViewportScroller) {
+    
+    // Listen for navigation end events to restore scroll position
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      if (this.shouldRestoreScroll) {
+        // Use setTimeout to ensure DOM has updated
+        setTimeout(() => {
+          this.viewportScroller.scrollToPosition(this.scrollPosition);
+          this.shouldRestoreScroll = false;
+        }, 0);
+      }
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -103,6 +125,10 @@ export class CollectionPriceFilterComponent implements OnChanges {
   }
 
   applyPriceFilter() {
+    // Save current scroll position before navigation
+    this.scrollPosition = this.viewportScroller.getScrollPosition();
+    this.shouldRestoreScroll = true;
+
     // Only apply filter if values have changed from defaults
     const priceValue = (this.selectedMinPrice === this.minPrice && this.selectedMaxPrice === this.maxPrice) 
       ? null 
@@ -123,6 +149,11 @@ export class CollectionPriceFilterComponent implements OnChanges {
     this.selectedMinPrice = this.minPrice;
     this.selectedMaxPrice = this.maxPrice;
     this.applyPriceFilter();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 }
