@@ -2,10 +2,10 @@
 <section class="pt-5 pb-5">
   <div class="container-fluid-lg">
     <owl-carousel-o [options]="bannerSliderOptions">
-      <ng-container *ngFor="let image of bannerImages">
+      <ng-container *ngFor="let banner of bannerImages">
         <ng-template carouselSlide>
-          <a href="/collections?sortBy=asc">
-            <img [src]="image" alt="Banner image" class="img-fluid w-100" loading="lazy">
+          <a [routerLink]="['/collections']" [queryParams]="banner.queryParams" class="banner-contain hover-effect">
+            <img [src]="banner.image_url" alt="Banner image" class="img-fluid w-100" loading="lazy">
           </a>
         </ng-template>
       </ng-container>

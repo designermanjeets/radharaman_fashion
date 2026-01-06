@@ -43,8 +43,14 @@ export class BerlinComponent {
   };
 
   public bannerImages = [
-    'assets/images/R 1.jpg',
-    'assets/images/R 2.jpg'
+    {
+      image_url: 'assets/images/R 1.jpg',
+      queryParams: { category: 'winter-collections', sortBy: 'asc' }
+    },
+    {
+      image_url: 'assets/images/R 2.jpg',
+      queryParams: { category: 'winter-collections', sortBy: 'asc' }
+    }
   ];
 
   constructor(private store: Store,
