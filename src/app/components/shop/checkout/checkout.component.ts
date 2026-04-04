@@ -10,6 +10,8 @@ import { AccountState } from '../../../shared/state/account.state';
 import { CartState } from '../../../shared/state/cart.state';
 import { OrderState } from '../../../shared/state/order.state';
 import { Checkout, PlaceOrder } from '../../../shared/action/order.action';
+import { GetUserDetails } from '../../../shared/action/account.action';
+import { Register } from '../../../shared/action/auth.action';
 import { ClearCart } from '../../../shared/action/cart.action';
 import { AddressModalComponent } from '../../../shared/components/widgets/modal/address-modal/address-modal.component';
 import { Cart } from '../../../shared/interface/cart.interface';
@@ -27,6 +29,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { tap } from 'rxjs/operators';
 import { OrderService } from '../../../shared/services/order.service';
 import { NotificationService } from '../../../shared/services/notification.service';
+import { AuthService } from '../../../shared/services/auth.service';
 import { v4 as uuidv4 } from 'uuid';
 
 @Component({
@@ -47,6 +50,7 @@ export class CheckoutComponent {
   @Select(OrderState.checkout) checkout$: Observable<OrderCheckout>;
   @Select(SettingState.setting) setting$: Observable<Values>;
   @Select(CartState.cartHasDigital) cartDigital$: Observable<boolean | number>;
+  @Select(CartState.cartTotal) cartTotal$: Observable<number>;
   @Select(CountryState.countries) countries$: Observable<Select2Data>;
   
   @ViewChild("addressModal") AddressModal: AddressModalComponent;
@@ -92,7 +96,8 @@ export class CheckoutComponent {
         private modalService: NgbModal,
         private sanitizer: DomSanitizer,
         private orderService: OrderService,
-        private notificationService: NotificationService
+        private notificationService: NotificationService,
+        private authService: AuthService
       ) {
     this.store.dispatch(new GetSettingOption());
 
@@ -120,6 +125,9 @@ export class CheckoutComponent {
         Validators.maxLength(10)
       ]),
       password: new FormControl('', [
+        Validators.minLength(6)
+      ]),
+      password_confirmation: new FormControl('', [
         Validators.minLength(6)
       ]),
       shipping_address: new FormGroup({
@@ -167,60 +175,15 @@ export class CheckoutComponent {
       })
     });
     
-    this.store.selectSnapshot(state => state.setting).setting.activation.guest_checkout = true;
-    
-    if(this.store.selectSnapshot(state => state.auth && state.auth.access_token)) {
-      this.form.removeControl('create_account');
-      this.form.removeControl('name');
-      this.form.removeControl('email');
-      this.form.removeControl('country_code');
-      this.form.removeControl('phone');
-      this.form.removeControl('password');
-      this.form.removeControl('password_confirmation');
-      this.form.removeControl('shipping_address');
-      this.form.removeControl('billing_address');
-
-      this.cartDigital$.subscribe(value => {
-        if(value == 1) {
-          this.form.controls['shipping_address_id'].clearValidators();
-          this.form.controls['delivery_description'].clearValidators();
-        } else {
-          this.form.controls['shipping_address_id'].setValidators([Validators.required]);
-          this.form.controls['delivery_description'].setValidators([Validators.required]);
-        }
-        this.form.controls['shipping_address_id'].updateValueAndValidity();
-        this.form.controls['delivery_description'].updateValueAndValidity();
-      });
-
-    } else {
-
-      if(this.store.selectSnapshot(state => state.setting).setting.activation.guest_checkout) {
-        this.form.removeControl('shipping_address_id');
-        this.form.removeControl('billing_address_id');
-        this.form.removeControl('points_amount');
-        this.form.removeControl('wallet_balance');
-        
-        this.form.controls['create_account'].valueChanges.subscribe(value => {
-          if(value) {
-            this.form.controls['name'].setValidators([Validators.required]);
-            this.form.controls['password'].setValidators([Validators.required]);
-          } else {
-            this.form.controls['name'].clearValidators();
-            this.form.controls['password'].clearValidators();
-          }
-          this.form.controls['name'].updateValueAndValidity();
-          this.form.controls['password'].updateValueAndValidity();
-        });
-
-        this.form.statusChanges.subscribe(value => {
-          if(value == 'VALID') {
-            this.checkout();
-          }
-        });
-
-      }
-
+    const setting = this.store.selectSnapshot(state => state.setting);
+    if (setting && setting.setting && setting.setting.activation) {
+      setting.setting.activation.guest_checkout = true;
     }
+    
+    // Watch for access token changes to dynamically update form controls
+    this.accessToken$.subscribe(token => {
+       this.updateFormControls(!!token);
+    });
 
     this.form.get('billing_address.same_shipping')?.valueChanges.subscribe(value => {
       if(value) {
@@ -322,7 +285,8 @@ export class CheckoutComponent {
       }
     });
     
-    this.localUserCheck = JSON.parse(localStorage.getItem('account') || '');
+    const accountData = localStorage.getItem('account');
+    this.localUserCheck = accountData ? JSON.parse(accountData) : null;
     
   }
 
@@ -375,16 +339,7 @@ export class CheckoutComponent {
   selectPaymentMethod(value: string) {
     this.form.controls['payment_method'].setValue(value);
     this.payment_method = value;
-    switch (value) {
-      case 'radha_cashfree':
-        this.checkout(value);
-        break;
-      case 'starpaisa_radha':
-        this.checkout(value);
-        break;
-      default:
-        break;
-    }
+    this.checkout(value);
   }
   
   // CashFree Payment Integration
@@ -627,6 +582,78 @@ export class CheckoutComponent {
     }
   }
 
+  private updateFormControls(isAuthenticated: boolean) {
+    if (isAuthenticated) {
+      // Add Authenticated Controls if missing
+      if (!this.form.contains('shipping_address_id')) {
+        this.form.addControl('shipping_address_id', new FormControl('', [Validators.required]));
+      }
+      if (!this.form.contains('billing_address_id')) {
+        this.form.addControl('billing_address_id', new FormControl('', [Validators.required]));
+      }
+      if (!this.form.contains('points_amount')) {
+        this.form.addControl('points_amount', new FormControl(false));
+      }
+      if (!this.form.contains('wallet_balance')) {
+        this.form.addControl('wallet_balance', new FormControl(false));
+      }
+
+      // Restore specific validators for authenticated users
+      this.form.controls['payment_method'].setValidators([Validators.required]);
+
+      // Remove Guest Controls
+      this.form.removeControl('create_account');
+      this.form.removeControl('name');
+      this.form.removeControl('email');
+      this.form.removeControl('phone');
+      this.form.removeControl('password');
+      this.form.removeControl('password_confirmation');
+      this.form.removeControl('shipping_address');
+      this.form.removeControl('billing_address');
+
+    } else {
+      // Add Guest Controls if missing
+      if (!this.form.contains('shipping_address')) {
+        this.form.addControl('shipping_address', new FormGroup({
+          title: new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z\s]+$/)]),
+          street: new FormControl('', [Validators.required]),
+          city: new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z\s]+$/)]),
+          phone: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]{10}$/), Validators.minLength(10), Validators.maxLength(10)]),
+          pincode: new FormControl('', [Validators.required]),
+          country_code: new FormControl('91', [Validators.required]),
+          country_id: new FormControl('', [Validators.required]),
+          state_id: new FormControl('', [Validators.required]),
+        }));
+      }
+      if (!this.form.contains('billing_address')) {
+        this.form.addControl('billing_address', new FormGroup({
+          same_shipping: new FormControl(false),
+          title: new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z\s]+$/)]),
+          street: new FormControl('', [Validators.required]),
+          city: new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z\s]+$/)]),
+          phone: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]{10}$/), Validators.minLength(10), Validators.maxLength(10)]),
+          pincode: new FormControl('', [Validators.required]),
+          country_code: new FormControl('91', [Validators.required]),
+          country_id: new FormControl('', [Validators.required]),
+          state_id: new FormControl('', [Validators.required]),
+        }));
+      }
+      if (!this.form.contains('create_account')) {
+        this.form.addControl('create_account', new FormControl(false));
+        this.form.addControl('name', new FormControl(''));
+        this.form.addControl('password', new FormControl(''));
+        this.form.addControl('password_confirmation', new FormControl(''));
+      }
+
+      // Remove Authenticated Controls
+      this.form.removeControl('shipping_address_id');
+      this.form.removeControl('billing_address_id');
+      this.form.removeControl('points_amount');
+      this.form.removeControl('wallet_balance');
+    }
+    this.form.updateValueAndValidity();
+  }
+
   checkout(payment_method?:string) {
     // If has coupon error while checkout
     if(this.couponError){
@@ -647,6 +674,7 @@ export class CheckoutComponent {
       this.store.dispatch(new Checkout(this.form.value)).subscribe({
         next:(value) => {
           this.storeData = value;
+          this.checkoutTotal = value.order.checkout;
         },
         error: (err) => {
           this.loading = false;
@@ -656,56 +684,125 @@ export class CheckoutComponent {
         complete: () => {
           this.loading = false;
           clearTimeout(timeout);
+          this.form.controls['payment_method'].updateValueAndValidity();
         }
       });
     } else {
       const invalidFields = Object?.keys(this.form?.controls).filter(key => this.form.controls[key].invalid);
+      console.warn('Form is invalid, skipping checkout API hit. Invalid fields:', invalidFields);
+      // For debugging in UI if needed: 
+      // this.notificationService.showError('Form Invalid: ' + invalidFields.join(', '));
+    }
+  }
+
+  registerOnly() {
+    this.form.markAllAsTouched();
+    // Check only the fields required for registration
+    const registrationFields = ['name', 'email', 'phone', 'password', 'country_code'];
+    let isValid = true;
+    registrationFields.forEach(field => {
+      if(this.form.get(field)?.invalid) isValid = false;
+    });
+
+    if (isValid) {
+      this.loading = true;
+      const registerPayload = {
+        ...this.form.value,
+        password_confirmation: this.form.value.password
+      };
+      
+      this.store.dispatch(new Register(registerPayload)).subscribe({
+        next: () => {
+           this.loading = false;
+           this.notificationService.showSuccess('Account created successfully! You are now logged in.');
+           // Refresh user details to populate AccountState
+           this.store.dispatch(new GetUserDetails());
+           // Refresh address modal data after becoming authenticated
+           if (this.AddressModal) {
+             this.AddressModal.downloadPINAreaExcelJSON();
+           }
+           // No redirect needed, the UI will react to the login state
+        },
+        error: (err) => {
+           this.loading = false;
+           this.notificationService.showError('Account creation failed: ' + err.message);
+        }
+      });
+    } else {
+      this.notificationService.showError('Please fill in all required account details correctly.');
     }
   }
 
   placeorder() {
-    if(this.form.valid) {
-      if(this.cpnRef && !this.cpnRef.nativeElement.value) {
+    if (this.form.valid) {
+      if (this.cpnRef && !this.cpnRef.nativeElement.value) {
         this.form.controls['coupon'].reset();
       }
 
-      // For StarPaisa Radha, initiate payment first (like your other website)
-      if(this.payment_method === 'starpaisa_radha') {
-        this.initiateStarpaisaRadhaIntent(this.payment_method);
-        return;
-      }
-
-      // For other payment methods, use the existing flow
-      const uuid = uuidv4();
-
-      const formData = {
-        ...this.form.value,
-        uuid: uuid
-      }
-
-      let action = new PlaceOrder(formData);
-      // this.store.dispatch(new PlaceOrder(formData));
-
-      this.orderService.placeOrder(action?.payload).pipe(
-        tap({
-          next: result => {
-            console.log(result);
+      // If "Create Account" is checked, register the user first
+      if (this.form.get('create_account')?.value) {
+        const registerPayload = {
+          ...this.form.value,
+          password_confirmation: this.form.value.password // Ensure matching password
+        };
+        
+        this.store.dispatch(new Register(registerPayload)).subscribe({
+          next: () => {
+             // Refresh user details to populate AccountState
+             this.store.dispatch(new GetUserDetails());
+             // Refresh address modal data after becoming authenticated
+             if (this.AddressModal) {
+               this.AddressModal.downloadPINAreaExcelJSON();
+             }
+             // Successfully registered (and logged in by State), now place order
+             this.executeOrderPlacement();
           },
-          error: err => {
-            throw new Error(err?.error?.message);
+          error: (err) => {
+             this.notificationService.showError('Account creation failed: ' + err.message);
           }
-        })
-      ).subscribe({
-        next: (result) => {
-        if(this.payment_method === 'radha_cashfree') {
+        });
+      } else {
+        this.executeOrderPlacement();
+      }
+    }
+  }
+
+  private executeOrderPlacement() {
+    // For StarPaisa Radha, initiate payment first (like your other website)
+    if (this.payment_method === 'starpaisa_radha') {
+      this.initiateStarpaisaRadhaIntent(this.payment_method);
+      return;
+    }
+
+    // For other payment methods, use the existing flow
+    const uuid = uuidv4();
+
+    const formData = {
+      ...this.form.value,
+      uuid: uuid
+    }
+
+    let action = new PlaceOrder(formData);
+
+    this.orderService.placeOrder(action?.payload).pipe(
+      tap({
+        next: result => {
+          console.log(result);
+        },
+        error: err => {
+          throw new Error(err?.error?.message);
+        }
+      })
+    ).subscribe({
+      next: (result) => {
+        if (this.payment_method === 'radha_cashfree') {
           this.initiateRadhaRamanIntent(this.payment_method, uuid, result);
         }
-        },
-        error: (err) => {
-          console.log(err);
-        }
-      });
-    }
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
   }
 
   paybyqr() {
@@ -718,8 +815,6 @@ export class CheckoutComponent {
   }
 
   ngOnDestroy() {
-    // this.store.dispatch(new Clear());
-    this.store.dispatch(new ClearCart());
     this.form.reset();
     this.pollingSubscription && this.pollingSubscription.unsubscribe();
   }

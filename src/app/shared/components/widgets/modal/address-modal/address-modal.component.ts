@@ -21,6 +21,7 @@ export class AddressModalComponent {
   public form: FormGroup;
   public closeResult: string;
   public modalOpen: boolean = false;
+  public loading: boolean = false;
 
   public states$: Observable<Select2Data>;
   public city$: Observable<Select2Data>;
@@ -190,7 +191,7 @@ export class AddressModalComponent {
               });
             }
 
-            this.form.controls['state_id'].setValue(this.filterPinCodeAreas.length ? this.filterPinCodeAreas[0].label : '');
+            this.form.controls['state_id'].setValue(this.filterPinCodeAreas.length ? this.filterPinCodeAreas[0].StateName : '');
             setTimeout(() => {
               this.form.controls['city'].setValue(this.filterPinCodeAreas.length ? this.filterPinCodeAreas[0].District : '');
               this.form.controls['area'].setValue(this.officeNameData.length ? this.officeNameData[0].label : '');
@@ -227,7 +228,9 @@ export class AddressModalComponent {
       next: (res) => {
         if(res) {
           this.pinCodeAreaOfficeCircleDataJSON = res['data'];
-          this.stateNameData = [...new Map(this.pinCodeAreaOfficeCircleDataJSON.map((item: any) => [item.StateName, item])).values()];
+          this.stateNameData = [...new Map(this.pinCodeAreaOfficeCircleDataJSON.map((item: any) => [item.StateName, item])).values()]
+            .map((item: any) => ({ label: item.StateName, value: item.StateName }));
+          this.cdRef.detectChanges();
         } else {
           this.notificationService.showError('Failed to fetch Pincode and Area data');
         }
@@ -266,7 +269,7 @@ export class AddressModalComponent {
       this.form.controls['city'].setValue('');
       this.form.controls['area'].setValue('');
       this.form.controls['pincode'].setValue('');
-      const selectedState = data.options[0].label;
+      const selectedState = data.value;
       const filteredDistricts = this.pinCodeAreaOfficeCircleDataJSON
         .filter((item: any) => item.StateName === selectedState)
         .map((item: any) => ({
@@ -387,12 +390,20 @@ export class AddressModalComponent {
       action = new UpdateAddress(this.form.value, this.address.id);
     }
     if(this.form.valid) {
+      this.loading = true;
       this.store.dispatch(action).subscribe({
+        next: (res) => {
+          this.loading = false;
+          this.modalService.dismissAll();
+        },
         complete: () => {
           this.form.reset();
           if(!this.address){
             this.form?.controls?.['country_code'].setValue('91');
           }
+        },
+        error: (err) => {
+          this.loading = false;
         }
       });
     }

@@ -88,6 +88,15 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-6 align-self-end mb-3" *ngIf="form.controls['create_account'].value">
+                                    <app-button
+                                        [class]="'btn theme-bg-color text-white btn-md w-100 fw-bold'"
+                                        [id]="'register_on_checkout'"
+                                        [type]="'button'"
+                                        (click)="registerOnly()">
+                                        {{ 'Register' | translate }}
+                                    </app-button>
+                                </div>
                             </form>
                         </div>
                         <div class="checkbox-main-box">
@@ -309,7 +318,8 @@
                                 (selectDelivery)="selectDelivery($event)">
                             </app-delivery-block>
                         </div>
-                        <div class="checkbox-main-box">
+                        <!-- Payment options hidden for guest checkout as per requirements -->
+                        <div class="checkbox-main-box" *ngIf="false">
                             <div class="checkout-title1">
                                 <h2>{{ 'Payment Options' | translate }}</h2>
                             </div>
@@ -374,9 +384,7 @@
                                     <div class="checkout-title">
                                         <h4>{{ 'Delivery Options' | translate }}</h4>
                                     </div>
-                                    <div class="empty-box" *ngIf="!(user$ | async)">
-                                        <h2>{{ 'No Delivery Options Found' | translate }}</h2>
-                                    </div>
+
                                     <app-delivery-block
                                         [setting]="(setting$ | async)!"
                                         (selectDelivery)="selectDelivery($event)">
@@ -391,9 +399,7 @@
                                     <div class="checkout-title">
                                         <h4>{{ 'Payment Options' | translate }}</h4>
                                     </div>
-                                    <div class="empty-box" *ngIf="!(user$ | async)">
-                                        <h2>{{ 'No Payment Options Found' | translate }}</h2>
-                                    </div>
+
                                     <app-payment-block
                                         [setting]="(setting$ | async)!"
                                         (selectPaymentMethod)="selectPaymentMethod($event)">
@@ -448,19 +454,19 @@
                                         <li>
                                             <h4>{{ 'Subtotal' | translate }}</h4>
                                             <h4 class="price">
-                                                {{ (checkoutTotal ? (checkoutTotal.total.sub_total | currencySymbol) : 'Not Calculated Yet' | translate ) }}
+                                                {{ (checkoutTotal ? (checkoutTotal.total.sub_total | currencySymbol) : (((cartTotal$ | async) || 0) | currencySymbol)) }}
                                             </h4>
                                         </li>
                                         <li *ngIf="!(cartDigital$ | async)">
                                             <h4>{{ 'Shipping' | translate }}</h4>
                                             <h4 class="price">
-                                                {{ (checkoutTotal ? (checkoutTotal.total.shipping_total | currencySymbol) : 'Not Calculated Yet' | translate) }}
+                                                {{ (checkoutTotal ? (checkoutTotal.total.shipping_total | currencySymbol) : (0 | currencySymbol)) }}
                                             </h4>
                                         </li>
                                         <li>
                                             <h4>{{ 'Tax' | translate  }}</h4>
                                             <h4 class="price">
-                                                {{ (checkoutTotal ? (checkoutTotal.total.tax_total | currencySymbol) : 'Not Calculated Yet' | translate ) }}
+                                                {{ (checkoutTotal ? (checkoutTotal.total.tax_total | currencySymbol) : (0 | currencySymbol)) }}
                                             </h4>
                                         </li>
                                         <li *ngIf="(user$ | async) && checkoutTotal && (user$ | async)?.point?.balance">
@@ -524,14 +530,14 @@
                                         <li class="list-total">
                                             <h4>{{ 'Total' | translate }}</h4>
                                             <h4 class="price">
-                                                {{ (checkoutTotal ? (checkoutTotal.total.total | currencySymbol) : 'Not Calculated Yet' | translate ) }}
+                                                {{ (checkoutTotal ? (checkoutTotal.total.total | currencySymbol) : (((cartTotal$ | async) || 0) | currencySymbol)) }}
                                             </h4>
                                         </li>
                                     </ul>
                                     <app-button
                                         [class]="'btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold'"
                                         [id]="'place_order'"
-                                        [disabled]="form.valid && checkoutTotal ? false : true">
+                                        [disabled]="form.invalid">
                                         {{ 'Place Order' | translate }}
                                     </app-button>
                                 </div>

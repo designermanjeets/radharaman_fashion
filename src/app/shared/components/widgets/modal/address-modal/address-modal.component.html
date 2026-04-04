@@ -149,7 +149,7 @@
           [id]="'cancel_addres_btn'" (click)="modal.dismiss('Cancel')">
           {{ 'Cancel' | translate }}
         </app-button>
-        <app-button [class]="'btn theme-bg-color btn-md fw-bold text-light'" [id]="'submit_address_btn'">
+        <app-button [class]="'btn theme-bg-color btn-md fw-bold text-light'" [id]="'submit_address_btn'" [spinner]="loading">
           {{ 'Submit' | translate }}
         </app-button>
       </div>

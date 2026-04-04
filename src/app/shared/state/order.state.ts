@@ -135,6 +135,7 @@ export class OrderState {
     return this.orderService.placeOrder(action?.payload).pipe(
       tap({
         next: result => {
+          ctx.dispatch(new ClearCart());
           if((action.payload.payment_method == 'cod' || action.payload.payment_method == 'radha_cashfree' || action.payload.payment_method == 'starpaisa_radha' || action.payload.payment_method == 'bank_transfer') && !result.is_guest) {
             this.router.navigateByUrl(`/account/order/details/${result.order_number}`);
           } else if((action.payload.payment_method == 'cod' || action.payload.payment_method == 'radha_cashfree' || action.payload.payment_method == 'starpaisa_radha' || action.payload.payment_method == 'bank_transfer') && result.is_guest) {
@@ -155,6 +156,7 @@ export class OrderState {
     return this.orderService.rePayment(action.payload).pipe(
       tap({
         next: result => {
+          ctx.dispatch(new ClearCart());
           if((action.payload.payment_method == 'cod' || action.payload.payment_method == 'radha_cashfree' || action.payload.payment_method == 'starpaisa_radha' || action.payload.payment_method == 'bank_transfer') && !result.is_guest) {
             this.router.navigateByUrl(`/account/order/details/${result.order_number}`);
           } else if((action.payload.payment_method == 'cod' || action.payload.payment_method == 'radha_cashfree' || action.payload.payment_method == 'starpaisa_radha' || action.payload.payment_method == 'bank_transfer') && result.is_guest) {

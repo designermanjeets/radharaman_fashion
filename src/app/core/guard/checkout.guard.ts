@@ -28,9 +28,12 @@ export class CheckoutGuard {
           catchError(() => of(true)) // Allow access even if GetUserDetails fails
         );
     } else {
-        if(this.store.selectSnapshot(state => state.setting).setting.activation.guest_checkout) {
-            // Redirect to the login page
-            if(this.store.selectSnapshot(state => state.cart.is_digital_only)) {
+        // Always allow guest checkout - settings.setting may not be loaded yet
+        // which previously caused a crash here, clearing the cart state
+        const settingState = this.store.selectSnapshot(state => state.setting);
+        const guestCheckoutEnabled = settingState?.setting?.activation?.guest_checkout ?? true;
+        if(guestCheckoutEnabled) {
+            if(this.store.selectSnapshot(state => state.cart?.is_digital_only)) {
                 return this.router.createUrlTree(['/auth/login']);
             }
         } else {
