@@ -44,12 +44,12 @@ export class BerlinComponent {
 
   public bannerImages = [
     {
-      image_url: 'assets/images/R 1.jpg',
-      queryParams: { category: 'winter-collections', sortBy: 'asc' }
+      image_url: 'assets/images/R 1.png',
+      queryParams: {}
     },
     {
-      image_url: 'assets/images/R 2.jpg',
-      queryParams: { category: 'winter-collections', sortBy: 'asc' }
+      image_url: 'assets/images/R 2.png',
+      queryParams: {}
     }
   ];
 

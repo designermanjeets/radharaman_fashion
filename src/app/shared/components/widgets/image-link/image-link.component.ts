@@ -18,6 +18,7 @@ export class ImageLinkComponent {
   @Input() link: string;
   @Input() bgImage: boolean;
   @Input() class: string;
+  @Input() lazy: boolean = true;
 
   public storageURL = environment.storageURL;
   

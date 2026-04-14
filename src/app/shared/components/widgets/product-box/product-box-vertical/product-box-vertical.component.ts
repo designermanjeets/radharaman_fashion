@@ -9,5 +9,6 @@ import { Product } from '../../../../../shared/interface/product.interface';
 export class ProductBoxVerticalComponent {
 
   @Input() product: Product;
+  @Input() lazy: boolean = false;
 
 }

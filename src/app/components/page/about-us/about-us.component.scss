@@ -1,0 +1,16 @@
+::ng-deep .fresh-vegetable-section {
+    .review-title {
+        h1 {
+            font-size: calc(24px + (8 * ((100vw - 320px) / 1600))) !important;
+            line-height: 1.4;
+        }
+    }
+
+    .delivery-list {
+        h2 {
+            font-size: calc(22px + (6 * ((100vw - 320px) / 1600))) !important;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+    }
+}

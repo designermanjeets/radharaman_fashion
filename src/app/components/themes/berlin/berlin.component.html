@@ -5,7 +5,7 @@
       <ng-container *ngFor="let banner of bannerImages">
         <ng-template carouselSlide>
           <a [routerLink]="['/collections']" [queryParams]="banner.queryParams" class="banner-contain hover-effect">
-            <img [src]="banner.image_url" alt="Banner image" class="img-fluid w-100" loading="lazy">
+            <img [src]="banner.image_url" alt="Banner image" class="img-fluid w-100" fetchpriority="high">
           </a>
         </ng-template>
       </ng-container>
@@ -17,6 +17,24 @@
   <app-theme-home-banner [theme]="'berlin'" [data]="data?.content?.home_banner"></app-theme-home-banner>
 </section> -->
 <!-- Home Section End -->
+
+<!-- Intro Content Section Start -->
+<section class="intro-section pb-5 text-center">
+  <div class="container-fluid-lg">
+    <div class="row">
+      <div class="col-12">
+        <div class="title title1 text-center mb-3">
+          <h1 style="font-size: 28px; font-weight: 700; color: var(--theme-color, #333);">Affordable & Trendy Fashion for Men and Women Online</h1>
+        </div>
+        <p class="text-muted mx-auto" style="max-width: 1200px; margin-bottom: 25px; line-height: 1.7; font-size: 15px;">
+          At Radharaman Fashion, style meets comfort and affordability. Our collection features modern outfits for men and women, including ethnic wear, casual clothing, and activewear designed for everyday fashion. Whether you’re dressing for work, festivals, or casual outings, you’ll find trendy styles that match your personality while staying within your budget.
+        </p>
+        <a routerLink="/collections" href="/collections" class="btn btn-md text-white theme-bg-color mt-4 d-inline-block cta-button">Explore the Latest Collection and Shop Your Style Today</a>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Intro Content Section End -->
 
 <!-- Service Section Start -->
 <app-service *ngIf="data?.content?.services_banner?.status" [data]="data?.content?.services_banner?.services || []">

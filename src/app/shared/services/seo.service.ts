@@ -48,15 +48,15 @@ export class SeoService {
   public setting: Values;
   constructor(private meta: Meta, private router: Router,
     private titleService: Title,
-    private ngZone: NgZone,) { 
+    private ngZone: NgZone,) {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: any) => {
       this.path = event.url
       this.updateSeo(this.path)
     });
-    
-    this.fetchData(); 
+
+    this.fetchData();
   }
 
   fetchData() {
@@ -70,8 +70,8 @@ export class SeoService {
       this.themeOption = option
     })
   }
-  
-  updateSeo(path:string){
+
+  updateSeo(path: string) {
     if (path.includes('product')) {
       if (this.product) {
         this.scoContent = {
@@ -83,8 +83,8 @@ export class SeoService {
       }
       this.customSCO();
     }
-    else if(path.includes('blog')) {
-      if(this.blog){
+    else if (path.includes('blog')) {
+      if (this.blog) {
         this.scoContent = {
           ...this.scoContent,
           'url': window.location.href,
@@ -95,8 +95,8 @@ export class SeoService {
         this.customSCO();
       }
     }
-    else if(path.includes('page')) {
-      if(this.page) {
+    else if (path.includes('page')) {
+      if (this.page) {
         this.scoContent = {
           ...this.scoContent,
           'url': window.location.href,
@@ -106,8 +106,8 @@ export class SeoService {
         }
       }
       this.customSCO();
-    } else if(path.includes('brand')) {
-      if(this.brand) {
+    } else if (path.includes('brand')) {
+      if (this.brand) {
         this.scoContent = {
           ...this.scoContent,
           'url': window.location.href,
@@ -117,8 +117,8 @@ export class SeoService {
         }
       }
       this.customSCO();
-    } else if(path.includes('category')) {
-      if(this.category) {
+    } else if (path.includes('category')) {
+      if (this.category) {
         this.scoContent = {
           ...this.scoContent,
           'url': window.location.href,
@@ -128,16 +128,16 @@ export class SeoService {
         }
       }
       this.customSCO();
-    } 
+    }
     else {
       this.updateDefaultSeo();
     }
   }
 
-  updateDefaultSeo(){
+  updateDefaultSeo() {
     // Use theme options or fallback to default values
-    const defaultTitle = this.themeOption?.seo?.meta_title || 'Online Clothing Store | Trendy & Affordable | Radharaman';
-    const defaultDescription = this.themeOption?.seo?.meta_description || 'Buy clothes online at Radharaman Fashion – your best online clothing site for trendy and affordable fashion for men, women & activewear.';
+    const defaultTitle = this.themeOption?.seo?.meta_title || 'Trendy & Affordable Fashion Online | Radharaman Fashion';
+    const defaultDescription = this.themeOption?.seo?.meta_description || 'Discover stylish and affordable clothing for men and women at Radharaman Fashion. Shop trendy ethnic wear, casual outfits, and activewear online in India';
     const defaultImage = this.themeOption?.seo?.og_image?.original_url || 'assets/images/logo/logo.png';
     const currentUrl = window.location.href;
 
@@ -158,7 +158,7 @@ export class SeoService {
     this.meta.updateTag({ property: 'twitter:description', content: defaultDescription });
     this.meta.updateTag({ property: 'twitter:image', content: defaultImage });
 
-    if(this.themeOption?.general && this.themeOption?.general?.exit_tagline_enable){
+    if (this.themeOption?.general && this.themeOption?.general?.exit_tagline_enable) {
       document.addEventListener('visibilitychange', () => {
         this.messages = this.themeOption.general.taglines;
         this.ngZone.run(() => {
@@ -179,17 +179,17 @@ export class SeoService {
         'og_description': this.themeOption?.seo?.meta_description,
         'og_image': this.themeOption?.seo?.og_image?.original_url,
       }
-      
+
       this.customSCO()
-    }else {
+    } else {
       return this.titleService.setTitle(this.themeOption?.general?.site_title && this.themeOption?.general?.site_tagline
         ? `${this.themeOption?.general?.site_title} | ${this.themeOption?.general?.site_tagline}` : '')
     }
   }
- 
-  customSCO(){
-    const title = this.scoContent['og_title'] || 'Online Clothing Store | Trendy & Affordable | Radharaman';
-    const description = this.scoContent['og_description'] || 'Buy clothes online at Radharaman Fashion – your best online clothing site for trendy and affordable fashion for men, women & activewear.';
+
+  customSCO() {
+    const title = this.scoContent['og_title'] || 'Trendy & Affordable Fashion Online | Radharaman Fashion';
+    const description = this.scoContent['og_description'] || 'Discover stylish and affordable clothing for men and women at Radharaman Fashion. Shop trendy ethnic wear, casual outfits, and activewear online in India';
 
     this.titleService.setTitle(title);
     this.meta.updateTag({ name: 'title', content: title });

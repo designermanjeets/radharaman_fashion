@@ -21,43 +21,42 @@
                     <app-no-data [class]="'no-data-footer'" [text]="'no_category_found'" *ngIf="!data?.footer?.footer_categories?.length"></app-no-data>
                 </div>
             </div> -->
-            <div class="col-xl-2 col-lg-2 col-sm-3"
-                (click)="toggle('useful_link')">
-                
+            <div class="col-xl-2 col-lg-2 col-sm-3" (click)="toggle('useful_link')">
+
                 <div class="footer-title" [class.show]="active['useful_link']">
                     <h4>{{ 'Useful Links' | translate }}</h4>
                 </div>
                 <div class="footer-contain">
                     <!-- <app-footer-links [links]="data?.footer?.useful_link || []"></app-footer-links> -->
-                     <ul>
-                        <li><a href="/privacy-policy">Privacy Policy</a></li>
-                        <li><a href="/term-condition">Terms and Conditions</a></li>
-                        <li><a href="/shipping-delivery">Shipping + delivery</a></li>
-                        <li><a href="/return-exchange">Return + Exchange</a></li>
-                        <li><a href="/contactus">Contact Us</a></li>
-                        <li><a href="/page/about-us">About Us</a></li>
-                     </ul>
+                    <ul>
+                        <li><a [routerLink]="['/privacy-policy']">Privacy Policy</a></li>
+                        <li><a [routerLink]="['/term-condition']">Terms and Conditions</a></li>
+                        <li><a [routerLink]="['/shipping-delivery']">Shipping + delivery</a></li>
+                        <li><a [routerLink]="['/return-exchange']">Return + Exchange</a></li>
+                        <li><a [routerLink]="['/contactus']">Contact Us</a></li>
+                        <li><a [routerLink]="['/about-us']">About Us</a></li>
+                    </ul>
                     <!-- No Data -->
-                    <app-no-data [class]="'no-data-footer'" [text]="'no_link_found'" *ngIf="!data?.footer?.useful_link?.length"></app-no-data>
+                    <app-no-data [class]="'no-data-footer'" [text]="'no_link_found'"
+                        *ngIf="!data?.footer?.useful_link?.length"></app-no-data>
                 </div>
             </div>
-            <div class="col-xl-2 col-sm-3"
-                (click)="toggle('help_center')">
+            <div class="col-xl-2 col-sm-3" (click)="toggle('help_center')">
                 <div class="footer-title" [class.show]="active['help_center']">
                     <h4>{{ 'Help Center' | translate }}</h4>
                 </div>
                 <div class="footer-contain">
                     <app-footer-links [links]="data?.footer?.help_center || []"></app-footer-links>
                     <!-- No Data -->
-                    <app-no-data [class]="'no-data-footer'" [text]="'no_link_found'" *ngIf="!data?.footer?.help_center?.length"></app-no-data>
+                    <app-no-data [class]="'no-data-footer'" [text]="'no_link_found'"
+                        *ngIf="!data?.footer?.help_center?.length"></app-no-data>
                 </div>
             </div>
-            <div class="col-xl-3 col-lg-4 col-sm-6"
-                *ngIf="data?.footer?.support_email ||
+            <div class="col-xl-3 col-lg-4 col-sm-6" *ngIf="data?.footer?.support_email ||
                     data?.footer?.support_number ||
                     data?.footer?.play_store_url ||
                     data?.footer?.app_store_url">
-                
+
                 <app-footer-contact [data]="data"></app-footer-contact>
             </div>
         </div>
@@ -71,4 +70,100 @@
         </div> -->
         <app-footer-social-links [data]="data" *ngIf="data?.footer?.social_media_enable"></app-footer-social-links>
     </div>
+
+    <!-- SEO Content Section Start -->
+    <div class="seo-footer-section mt-4">
+        <h2>Online Fashion Store for Men & Women in India</h2>
+        <p>
+            <a href="https://radharamanfashion.in" class="theme-color fw-bold">Radharaman Fashion</a> is a modern online
+            clothing store that offers stylish and affordable fashion for men and women in India. The brand focuses on
+            providing trendy outfits that combine comfort, quality, and contemporary style. Whether you are looking for
+            everyday casual wear, festive outfits, or comfortable athleisure clothing, Radharaman Fashion brings a
+            variety of options designed to suit different lifestyles and fashion preferences.
+        </p>
+        <p class="mb-4">
+            Our goal is to make fashion accessible and enjoyable by offering clothing that reflects the latest trends
+            while maintaining comfort and affordability. With easy online shopping and a wide collection of styles,
+            customers can conveniently explore and discover outfits that match their personality and daily fashion
+            needs.
+        </p>
+
+        <h3>
+            <a href="https://radharamanfashion.in/collections">Shop Trendy Clothing Online at Affordable Prices</a>
+        </h3>
+        <p>
+            Finding stylish clothing online is now simple and convenient for modern shoppers. At Radharaman Fashion,
+            customers can browse a wide range of clothing collections designed for different occasions. From casual
+            everyday outfits to stylish ethnic wear and comfortable activewear, the store offers fashion choices that
+            blend style and practicality.
+        </p>
+        <p class="mb-4">
+            The collections are carefully selected to match current fashion trends while ensuring comfort and quality
+            fabrics. Whether you want to refresh your wardrobe or find a statement outfit for a special occasion,
+            Radharaman Fashion provides modern clothing options that are both fashionable and budget-friendly.
+        </p>
+
+        <h3>
+            <a href="https://radharamanfashion.in/collections?category=women">Women’s Fashion – Stylish Dresses, Tops &
+                Everyday Wear</a>
+        </h3>
+        <p>
+            The women’s fashion collection at Radharaman Fashion features <a
+                href="https://radharamanfashion.in/product/aqua-blue-chanderi-lehenga-set"
+                class="theme-color fw-bold">trendy dresses</a>, stylish tops, and versatile outfits designed for modern
+            lifestyles. These outfits are created with comfortable fabrics and contemporary designs that make them
+            suitable for both casual and special occasions.
+        </p>
+        <p class="mb-4">
+            From relaxed everyday fashion to <a
+                href="https://radharamanfashion.in/product/beige-pure-kota-tissue-handcrafted-gota-patti-saree"
+                class="theme-color fw-bold">elegant outfits</a> for social events, the collection offers a variety of
+            styles that allow women to express their personality while staying comfortable and confident throughout the
+            day.
+        </p>
+
+        <h3>
+            <a href="https://radharamanfashion.in/collections?category=men">Men’s Fashion – Casual, Ethnic & Modern
+                Styles</a>
+        </h3>
+        <p>
+            Radharaman Fashion also offers a diverse range of men’s clothing including <a
+                href="https://radharamanfashion.in/product/men-s-grey-kurta-indowestern-dhoti-set"
+                class="theme-color fw-bold">stylish kurtas</a>, casual shirts, <a
+                href="https://radharamanfashion.in/product/men-s-t-shirt" class="theme-color fw-bold">comfortable
+                t-shirts</a>, and everyday wear. The collection blends traditional ethnic fashion with modern styles,
+            making it suitable for both festive occasions and daily wear.
+        </p>
+        <p class="mb-4">
+            With attention to comfort and quality fabrics, the men’s collection provides fashionable clothing that helps
+            men maintain a stylish appearance while enjoying practical and comfortable outfits.
+        </p>
+
+        <h3>
+            <a href="https://radharamanfashion.in/collections?category=activewear">Activewear & Athleisure for Men and
+                Women</a>
+        </h3>
+        <p>
+            For customers who value comfort and movement, the offers stylish athleisure outfits designed for both men
+            and women. These clothes are made using breathable materials that provide flexibility and comfort during <a
+                href="https://radharamanfashion.in/product/petite-high-waist-premium-active-flare-legging"
+                class="theme-color fw-bold">workouts</a>, fitness routines, or <a
+                href="http://radharamanfashion.in/product/black-power-seamless-t-shirt"
+                class="theme-color fw-bold">casual daily activities</a>.
+        </p>
+        <p class="mb-4">
+            Activewear at Radharaman Fashion combines functionality with modern design, allowing customers to stay
+            active while maintaining a fashionable look.
+        </p>
+
+        <h3>Discover Affordable Fashion at Radharaman Fashion</h3>
+        <p class="mb-0">
+            At <a href="https://radharamanfashion.in/" class="theme-color fw-bold">Radharaman Fashion</a>, fashion is
+            about expressing individuality while staying comfortable and confident. The brand continues to expand its
+            collections to provide trendy clothing that meets the needs of modern shoppers. By focusing on quality,
+            affordability, and contemporary designs, Radharaman Fashion aims to become a trusted destination for stylish
+            clothing online in India.
+        </p>
+    </div>
+    <!-- SEO Content Section End -->
 </div>

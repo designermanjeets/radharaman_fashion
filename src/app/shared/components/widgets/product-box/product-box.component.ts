@@ -13,18 +13,19 @@ import { ThemeOptionService } from '../../../services/theme-option.service';
   styleUrls: ['./product-box.component.scss']
 })
 export class ProductBoxComponent {
-  
+
   @Input() product: Product;
-  @Input() style: string  = 'horizontal';
+  @Input() style: string = 'horizontal';
   @Input() class: string;
   @Input() close: boolean = false;
+  @Input() lazy: boolean = false;
 
   public variant: string;
   public theme: string;
 
   @Select(ThemeOptionState.themeOptions) themeOption$: Observable<Option>;
 
-  constructor(public themeOptionService: ThemeOptionService){}
+  constructor(public themeOptionService: ThemeOptionService) { }
 
 
 }

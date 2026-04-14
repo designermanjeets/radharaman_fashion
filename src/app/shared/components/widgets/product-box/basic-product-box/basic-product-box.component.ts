@@ -21,6 +21,7 @@ export class BasicProductBoxComponent implements OnInit, AfterViewInit {
   @Input() product: Product;
   @Input() class: string;
   @Input() close: boolean;
+  @Input() lazy: boolean = false;
 
   @Select(CartState.cartItems) cartItem$: Observable<Cart[]>;
 
@@ -36,9 +37,9 @@ export class BasicProductBoxComponent implements OnInit, AfterViewInit {
     config: NgbRatingConfig,
     private cdRef: ChangeDetectorRef
   ) {
-		config.max = 5;
-		config.readonly = true;
-	}
+    config.max = 5;
+    config.readonly = true;
+  }
 
   ngOnInit() {
     this.cartItem$.subscribe(items => {
@@ -53,7 +54,7 @@ export class BasicProductBoxComponent implements OnInit, AfterViewInit {
     this.cdRef.detectChanges();
   }
 
-  
+
   addToCart(product: Product, qty: number) {
     const params: CartAddOrUpdate = {
       id: this.cartItem ? this.cartItem.id : null,
@@ -66,24 +67,24 @@ export class BasicProductBoxComponent implements OnInit, AfterViewInit {
     this.store.dispatch(new AddToCart(params));
   }
 
-  addToWishlist(product: Product){
+  addToWishlist(product: Product) {
     product['is_wishlist'] = !product['is_wishlist'];
-    let action = product['is_wishlist']? new AddToWishlist({ product_id: product.id }) : new DeleteWishlist(product.id);
-    if(action){
+    let action = product['is_wishlist'] ? new AddToWishlist({ product_id: product.id }) : new DeleteWishlist(product.id);
+    if (action) {
       this.store.dispatch(action);
     }
   }
 
-  removeWishlist(id: number){
+  removeWishlist(id: number) {
     this.store.dispatch(new DeleteWishlist(id));
   }
 
-  addToCompar(id: number){
+  addToCompar(id: number) {
     this.store.dispatch(new AddToCompare({ product_id: id }));
   }
 
   externalProductLink(link: string) {
-    if(link) {
+    if (link) {
       window.open(link, "_blank");
     }
   }

@@ -11,15 +11,13 @@
         <a [routerLink]="['/product/', product.slug]">
             <img [src]="product.product_thumbnail ?
                  product.product_thumbnail.original_url :
-                 'assets/images/product.png'" class="img-fluid" [alt]="product.name">
+                 'assets/images/product.png'" class="img-fluid" [alt]="product.name"
+                [attr.loading]="lazy ? 'lazy' : null">
         </a>
         <app-product-hover-action [product]="product" *ngIf="!close"></app-product-hover-action>
         <div class="product-header-top" *ngIf="close">
-            <app-button
-              [class]="'btn wishlist-button close_button'"
-              [spinner]="false"
-              [id]="'close_btn'"
-              (click)="removeWishlist(product.id)">
+            <app-button [class]="'btn wishlist-button close_button'" [spinner]="false" [id]="'close_btn'"
+                (click)="removeWishlist(product.id)">
                 <i class="ri-close-line"></i>
             </app-button>
         </div>
@@ -32,7 +30,8 @@
         <p>{{ product.short_description }}</p>
         <div class="product-rating mb-2">
             <ngb-rating [rate]="product.rating_count"></ngb-rating>
-            <h6 class="rating-number" *ngIf="product.rating_count">( {{ product.rating_count.toFixed(2) || 0 }} {{'ratings' | translate}})</h6>
+            <h6 class="rating-number" *ngIf="product.rating_count">( {{ product.rating_count.toFixed(2) || 0 }}
+                {{'ratings' | translate}})</h6>
         </div>
         <div class="product-bottom">
             <h5 class="sold text-content">

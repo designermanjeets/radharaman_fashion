@@ -309,10 +309,10 @@ export const themeOptionsTrendVibe = {
         },
         "seo": {
             "meta_tags": null,
-            "meta_title": null,
-            "meta_description": null,
-            "og_title": null,
-            "og_description": null,
+            "meta_title": "Trendy & Affordable Fashion Online | Radharaman Fashion",
+            "meta_description": "Discover stylish and affordable clothing for men and women at Radharaman Fashion. Shop trendy ethnic wear, casual outfits, and activewear online in India.",
+            "og_title": "Trendy & Affordable Fashion Online | Radharaman Fashion",
+            "og_description": "Discover stylish and affordable clothing for men and women at Radharaman Fashion. Shop trendy ethnic wear, casual outfits, and activewear online in India.",
             "og_image_id": null,
             "og_image": null
         }

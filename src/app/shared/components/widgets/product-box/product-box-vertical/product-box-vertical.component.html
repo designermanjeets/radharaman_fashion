@@ -2,7 +2,7 @@
     <a [routerLink]="['/product/', product.slug]" class="offer-image">
         <img [src]="product.product_thumbnail
                 ? product.product_thumbnail.original_url
-                : 'assets/images/product.png'" alt="product">
+                : 'assets/images/product.png'" alt="product" [attr.loading]="lazy ? 'lazy' : null">
     </a>
     <div class="offer-detail">
         <div>

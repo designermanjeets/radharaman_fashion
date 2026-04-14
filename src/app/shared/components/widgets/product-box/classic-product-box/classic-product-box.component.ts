@@ -10,17 +10,18 @@ import { DeleteWishlist } from '../../../../action/wishlist.action';
   styleUrl: './classic-product-box.component.scss'
 })
 export class ClassicProductBoxComponent {
-  
+
   @Input() product: Product;
   @Input() class: string;
   @Input() close: boolean;
-  
-  constructor(config: NgbRatingConfig, private store: Store) {
-		config.max = 5;
-		config.readonly = true;
-	}
+  @Input() lazy: boolean = false;
 
-  removeWishlist(id: number){
+  constructor(config: NgbRatingConfig, private store: Store) {
+    config.max = 5;
+    config.readonly = true;
+  }
+
+  removeWishlist(id: number) {
     this.store.dispatch(new DeleteWishlist(id));
   }
 }

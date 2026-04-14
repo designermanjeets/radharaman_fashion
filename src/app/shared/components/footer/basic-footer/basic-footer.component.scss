@@ -1,0 +1,39 @@
+.seo-footer-section {
+    background-color: #F4E2C7;
+    color: #000;
+    padding: 30px;
+    border-radius: 8px;
+    text-align: left;
+
+    h2 {
+        font-size: xx-large;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: #000;
+    }
+
+    h3 {
+        font-size: x-large;
+        font-weight: 600;
+        margin-bottom: 15px;
+        
+        a, & {
+            color: #000;
+        }
+    }
+
+    p {
+        font-size: 15px;
+        margin-bottom: 15px;
+        line-height: 1.6;
+        color: #111;
+
+        &.mb-4 {
+            margin-bottom: 25px !important;
+        }
+
+        &.mb-0 {
+            margin-bottom: 0 !important;
+        }
+    }
+}

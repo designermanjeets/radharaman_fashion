@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { Meta } from '@angular/platform-browser';
 import { LoaderState } from '../../shared/state/loader.state';
 import { Breadcrumb } from '../../shared/interface/breadcrumb';
 import { GetNotification } from '../../shared/action/notification.action';
@@ -21,7 +22,8 @@ export class AccountComponent {
     items: [{ label: 'Dashboard', active: false }]
   };
 
-  constructor(private store: Store, private router: Router) {
+  constructor(private store: Store, private router: Router, private meta: Meta) {
+    this.meta.updateTag({ name: 'robots', content: 'noindex, nofollow' });
     this.store.dispatch(new GetNotification());
    
       this.breadcrumb.title = this.router?.url?.split('?')[0]?.split('/')?.pop()!;

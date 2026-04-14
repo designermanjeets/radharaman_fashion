@@ -1,22 +1,23 @@
 <!-- Fresh Vegetable Section Start -->
 <app-breadcrumb [breadcrumb]="breadcrumb"></app-breadcrumb>
 
-<section class="fresh-vegetable-section section-lg-space" *ngIf="aboutUs?.about?.futures?.length && (aboutUs?.about?.content_left_image_url || aboutUs?.about?.content_right_image_url)">
+<!-- About Section Start -->
+<section class="fresh-vegetable-section section-lg-space">
     <div class="container-fluid-lg">
-        <div class="row gx-xl-5 gy-xl-0 g-3 ratio_148_1">
+        <div class="row gx-xl-5 gy-xl-0 g-3 ratio_148_1 align-items-center">
             <div class="col-xl-6 col-12">
                 <div class="row g-sm-4 g-2">
                     <div class="col-6">
                         <div class="fresh-image-2">
-                            <div>
-                                <img [src]="storageURL + aboutUs?.about?.content_left_image_url" class="bg-img " alt="image">
+                            <div class="bg-size"
+                                [ngStyle]="{'background-image': 'url(' + (aboutUs?.about?.content_left_image_url ? (storageURL + aboutUs?.about?.content_left_image_url) : 'assets/images/inner-page/about-us/1.jpg') + ')'}">
                             </div>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="fresh-image">
-                            <div>
-                                <img [src]="storageURL + aboutUs?.about?.content_right_image_url" class="bg-img " alt="image">
+                            <div class="bg-size"
+                                [ngStyle]="{'background-image': 'url(' + (aboutUs?.about?.content_right_image_url ? (storageURL + aboutUs?.about?.content_right_image_url) : 'assets/images/inner-page/about-us/2.jpg') + ')'}">
                             </div>
                         </div>
                     </div>
@@ -27,36 +28,163 @@
                 <div class="fresh-contain p-center-left">
                     <div>
                         <div class="review-title">
-                            <h4>{{ aboutUs?.about?.sub_title }}</h4>
-                            <h2>{{ aboutUs?.about?.title }}</h2>
+                            <h1>About Radharaman Fashion – Trendy Online Fashion Store in India</h1>
                         </div>
 
                         <div class="delivery-list">
-                            <p class="text-content">{{ aboutUs?.about?.description }}</p>
+                            <p class="text-content">
+                                Fashion is a powerful way to express personality, confidence, and individuality. At
+                                <a [routerLink]="['/']"><strong>Radharaman Fashion</strong></a>, we believe clothing
+                                should not only look stylish but also feel comfortable and accessible to everyone. Our
+                                brand was created with the idea of making trendy and affordable fashion available online
+                                for modern shoppers in India.
+                            </p>
+                            <p class="text-content">
+                                <strong>Radharaman Fashion</strong> is an online clothing store that offers a variety of
+                                stylish outfits designed for men and women who want to stay fashionable without
+                                compromising on comfort or budget. From casual everyday clothing to ethnic wear and
+                                modern activewear, our collections are designed to suit different lifestyles and
+                                occasions.
+                            </p>
+                            <p class="text-content">
+                                As fashion trends continue to evolve, our goal is to provide clothing that keeps up with
+                                modern style preferences while maintaining practicality and comfort for everyday wear.
+                            </p>
 
-                            <ul class="delivery-box">
-                                <li *ngFor="let futures of aboutUs?.about?.futures">
-                                    <div class="delivery-box">
-                                        <div class="delivery-icon">
-                                            <img [src]="storageURL + futures.icon" alt="icon">
-                                        </div>
-                                        <div class="delivery-detail">
-                                            <h5 class="text">{{ futures.title }}</h5>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
+                            <h2 class="mt-4">Our Mission – <a [routerLink]="['/collections']"
+                                    [queryParams]="{category: 'men,women'}">Affordable Fashion for Men and Women</a>
+                            </h2>
+                            <p class="text-content">
+                                The mission of <strong>Radharaman Fashion</strong> is to make affordable fashion
+                                accessible to people across India. We believe that everyone deserves the opportunity to
+                                explore stylish clothing without paying extremely high prices. Our collections are
+                                designed with a balance of modern fashion trends, comfort, and practicality. By offering
+                                a range of clothing options for men and women, we aim to help customers find outfits
+                                that match their personality and everyday lifestyle.
+                            </p>
+
+                            <h2 class="mt-4">Our Vision – A Growing Online Fashion Destination</h2>
+                            <p class="text-content">
+                                Our vision is to become a trusted <a [routerLink]="['/']"><strong>online fashion
+                                        destination in India</strong></a> where customers can easily discover stylish
+                                and comfortable clothing. We aim to build a fashion platform that offers diverse
+                                collections while focusing on quality, convenience, and customer satisfaction.
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="row gx-xl-5 gy-xl-0 g-3 mt-5">
+            <div class="col-12">
+                <div class="delivery-list">
+                    <h2><a [routerLink]="['/collections']" [queryParams]="{category: 'men'}">Men’s Fashion Online</a> –
+                        Stylish Clothing for Everyday Wear</h2>
+                    <p class="text-content">
+                        Men today look for clothing that is both fashionable and practical. The men’s fashion collection
+                        at <strong>Radharaman Fashion</strong> offers a variety of outfits designed to suit everyday
+                        activities as well as special occasions.
+                    </p>
+                    <p class="text-content">
+                        Customers can explore clothing options such as stylish shirts, comfortable t-shirts, casual
+                        outfits, and ethnic kurtas that reflect modern fashion trends. These designs focus on
+                        versatility, allowing men to wear them in multiple settings including work, casual outings, and
+                        festive gatherings. By combining comfortable fabrics with contemporary styles, our men’s
+                        clothing collection helps customers maintain a confident and polished look throughout the day.
+                    </p>
+
+                    <h2 class="mt-4"><a [routerLink]="['/collections']" [queryParams]="{category: 'women'}">Women’s
+                            Fashion Online</a> – Modern Dresses, Tops & Stylish Outfits</h2>
+                    <p class="text-content">
+                        The women’s fashion collection at <strong>Radharaman Fashion</strong> is designed to celebrate
+                        creativity and individuality. The collection includes fashionable dresses, trendy tops, and
+                        stylish outfits suitable for everyday wear as well as social events.
+                    </p>
+                    <p class="text-content">
+                        Women today prefer clothing that offers both comfort and elegance. Our collections are designed
+                        with attention to modern fashion trends while maintaining a focus on wearable designs that fit
+                        naturally into daily routines. From casual outfits to more refined styles, the women’s fashion
+                        category offers a variety of choices that allow customers to express their personal style with
+                        confidence.
+                    </p>
+
+                    <h2 class="mt-4"><a [routerLink]="['/collections']"
+                            [queryParams]="{category: 'activewear'}">Activewear & Athleisure</a> – Comfortable Fashion
+                        for Active Lifestyles</h2>
+                    <p class="text-content">
+                        Modern lifestyles often require clothing that supports both comfort and movement. That is why
+                        <strong>activewear and athleisure</strong> have become an important part of contemporary
+                        fashion.
+                    </p>
+                    <p class="text-content">
+                        <strong>Radharaman Fashion</strong> offers activewear collections designed for both men and
+                        women who want clothing that works well during workouts, outdoor activities, or casual daily
+                        routines. These outfits are created using breathable fabrics and flexible designs that allow
+                        ease of movement.
+                    </p>
+
+                    <h2 class="mt-4">Why Choose Radharaman Fashion for Online Clothing</h2>
+                    <p class="text-content">
+                        There are many online fashion stores today, but <strong>Radharaman Fashion</strong> focuses on
+                        creating a balanced fashion experience that combines affordability, style, and comfort.
+                    </p>
+                    <ul class="text-content list-dot">
+                        <li>Trend-inspired clothing for men and women</li>
+                        <li>Affordable fashion suitable for everyday wear</li>
+                        <li>Comfortable fabrics designed for modern lifestyles</li>
+                        <li>Convenient <a [routerLink]="['/']"><strong>online shopping experience in India</strong></a>
+                        </li>
+                        <li>Clothing collections inspired by current fashion trends</li>
+                    </ul>
+
+                    <h2 class="mt-4">Our Approach to Modern Fashion</h2>
+                    <p class="text-content">
+                        Fashion should adapt to people’s lifestyles rather than the other way around. At
+                        <strong>Radharaman Fashion</strong>, we follow a simple philosophy that focuses on three
+                        important aspects of clothing: style, comfort, and practicality.
+                    </p>
+                    <ul class="text-content no-list">
+                        <li><strong>Style:</strong> Our collections reflect current fashion trends so customers can stay
+                            updated with modern styles.</li>
+                        <li><strong>Comfort:</strong> Clothing should feel comfortable throughout the day. We prioritize
+                            fabrics and designs that support everyday wear.</li>
+                        <li><strong>Practicality:</strong> Fashion should be versatile enough to fit different
+                            occasions, from casual outings to social gatherings.</li>
+                    </ul>
+
+                    <h2 class="mt-4">Fashion for Modern Indian Lifestyles</h2>
+                    <p class="text-content">
+                        Fashion trends in India continue to evolve as people experiment with different styles and
+                        influences. Many individuals prefer clothing that blends <a
+                            [routerLink]="['/product/beige-pure-kota-tissue-handcrafted-gota-patti-saree']"><strong>traditional
+                                inspiration</strong></a> with modern design.
+                    </p>
+                    <p class="text-content">
+                        <strong>Radharaman Fashion</strong> takes inspiration from these changing trends while
+                        maintaining a focus on comfort and affordability. Our collections are designed to suit different
+                        lifestyles, making it easier for customers to find clothing that fits their personal
+                        preferences.
+                    </p>
+
+                    <h2 class="mt-4">Discover Your Style with Radharaman Fashion</h2>
+                    <p class="text-content">
+                        Fashion is a personal journey, and everyone deserves clothing that reflects their individuality.
+                        <a [routerLink]="['/']"><strong>Radharaman Fashion</strong></a> invites customers to explore a
+                        diverse range of outfits designed for modern lifestyles. From trendy casual wear to stylish
+                        outfits and comfortable activewear, our collections aim to make fashion accessible and enjoyable
+                        for everyone.
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
-<!-- Fresh Vegetable Section End -->
+<!-- About Section End -->
 
 <!-- Client Section Start -->
-<section class="client-section section-lg-space" *ngIf="aboutUs?.clients?.status && aboutUs?.clients?.content?.length && (aboutUs?.clients?.sub_title || aboutUs?.clients?.title)">
+<section class="client-section section-lg-space"
+    *ngIf="aboutUs?.clients?.status && aboutUs?.clients?.content?.length && (aboutUs?.clients?.sub_title || aboutUs?.clients?.title)">
     <div class="container-fluid-lg">
         <div class="row">
             <div class="col-12">
@@ -65,21 +193,21 @@
                     <h2 class="center">{{ aboutUs?.clients?.title }}</h2>
                 </div>
                 <div class="slider-dots">
-                <owl-carousel-o [options]="clientsOptions">
-                    <ng-template carouselSlide *ngFor="let client of aboutUs?.clients?.content">
-                    <div class="slider-3_1 product-wrapper">
-                        <div>
-                            <div class="clint-contain">
-                                <div class="client-icon">
-                                    <img [src]="storageURL + client.icon" [alt]="client.title">
+                    <owl-carousel-o [options]="clientsOptions">
+                        <ng-template carouselSlide *ngFor="let client of aboutUs?.clients?.content">
+                            <div class="slider-3_1 product-wrapper">
+                                <div>
+                                    <div class="clint-contain">
+                                        <div class="client-icon">
+                                            <img [src]="storageURL + client.icon" [alt]="client.title">
+                                        </div>
+                                        <h4>{{ client.title }}</h4>
+                                        <p>{{ client.description }}</p>
+                                    </div>
                                 </div>
-                                <h4>{{ client.title }}</h4>
-                                <p>{{ client.description }}</p>
                             </div>
-                        </div>
-                    </div>
-                    </ng-template>
-                </owl-carousel-o>
+                        </ng-template>
+                    </owl-carousel-o>
                 </div>
             </div>
         </div>
@@ -88,7 +216,8 @@
 <!-- Client Section End -->
 
 <!-- Team Section Start -->
-<section class="team-section section-lg-space" *ngIf="aboutUs?.team?.status && aboutUs?.team?.members?.length && (aboutUs?.team?.sub_title || aboutUs?.team?.title)">
+<section class="team-section section-lg-space"
+    *ngIf="aboutUs?.team?.status && aboutUs?.team?.members?.length && (aboutUs?.team?.sub_title || aboutUs?.team?.title)">
     <div class="container-fluid-lg">
         <div class="about-us-title text-center">
             <h4 class="text-content">{{ aboutUs?.team?.sub_title }}</h4>
@@ -96,50 +225,50 @@
         </div>
         <div class="row">
             <div class="col-12">
-            <div class="slider-dots">
-                <owl-carousel-o [options]="teamOptions">
-                <ng-template carouselSlide *ngFor="let team of aboutUs?.team?.members">
-                    <div>
-                        <div class="team-box">
-                            <div class="team-iamge">
-                                <img [src]="storageURL + team?.profile_image_url" class="img-fluid "
-                                    [alt]="team?.name">
+                <div class="slider-dots">
+                    <owl-carousel-o [options]="teamOptions">
+                        <ng-template carouselSlide *ngFor="let team of aboutUs?.team?.members">
+                            <div>
+                                <div class="team-box">
+                                    <div class="team-iamge">
+                                        <img [src]="storageURL + team?.profile_image_url" class="img-fluid "
+                                            [alt]="team?.name">
+                                    </div>
+                                    <div class="team-name">
+                                        <h3>{{ team?.name }}</h3>
+                                        <h5>{{ team?.designation }}</h5>
+                                        <p>{{ team?.description }}</p>
+                                        <ul class="team-media">
+                                            <li *ngIf="team?.facebook">
+                                                <a href="{{ team?.facebook }}" class="fb-bg">
+                                                    <i class="ri-facebook-fill"></i>
+                                                </a>
+                                            </li>
+
+                                            <li *ngIf="team?.pinterest">
+                                                <a href="{{ team?.pinterest }}" class="pint-bg">
+                                                    <i class="ri-pinterest-fill"></i>
+                                                </a>
+                                            </li>
+
+                                            <li *ngIf="team?.twitter">
+                                                <a href="{{ team?.twitter }}" class="twitter-bg">
+                                                    <i class="ri-twitter-fill"></i>
+                                                </a>
+                                            </li>
+
+                                            <li *ngIf="team?.instagram">
+                                                <a href="{{ team?.instagram }}" class="insta-bg">
+                                                    <i class="ri-instagram-fill"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="team-name">
-                                <h3>{{ team?.name }}</h3>
-                                <h5>{{ team?.designation }}</h5>
-                                <p>{{ team?.description }}</p>
-                                <ul class="team-media">
-                                    <li *ngIf="team?.facebook">
-                                        <a href="{{ team?.facebook }}" class="fb-bg">
-                                            <i class="ri-facebook-fill"></i>
-                                        </a>
-                                    </li>
-
-                                    <li *ngIf="team?.pinterest">
-                                        <a href="{{ team?.pinterest }}" class="pint-bg">
-                                            <i class="ri-pinterest-fill"></i>
-                                        </a>
-                                    </li>
-
-                                    <li *ngIf="team?.twitter">
-                                        <a href="{{ team?.twitter }}" class="twitter-bg">
-                                            <i class="ri-twitter-fill"></i>
-                                        </a>
-                                    </li>
-
-                                    <li *ngIf="team?.instagram">
-                                        <a href="{{ team?.instagram }}" class="insta-bg">
-                                            <i class="ri-instagram-fill"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </ng-template>
-                </owl-carousel-o>
-            </div>
+                        </ng-template>
+                    </owl-carousel-o>
+                </div>
             </div>
         </div>
     </div>
@@ -147,35 +276,36 @@
 <!-- Team Section End -->
 
 <!-- Review Section Start -->
-<section class="review-section section-lg-space" *ngIf="aboutUs?.testimonial?.status && aboutUs?.testimonial?.reviews?.length && (aboutUs?.testimonial?.sub_title || aboutUs?.testimonial?.title)">
-    <div class="container-fluid" >
+<section class="review-section section-lg-space"
+    *ngIf="aboutUs?.testimonial?.status && aboutUs?.testimonial?.reviews?.length && (aboutUs?.testimonial?.sub_title || aboutUs?.testimonial?.title)">
+    <div class="container-fluid">
         <div class="about-us-title text-center">
             <h4 class="text-content">{{ aboutUs?.testimonial?.sub_title }}</h4>
             <h2 class="center">{{ aboutUs?.testimonial?.title }}</h2>
         </div>
         <div class="row">
             <div class="col-12">
-            <div class="slider-dots">
-                <owl-carousel-o [options]="testimonialsOptions">
-                    <ng-template carouselSlide *ngFor="let team of aboutUs?.testimonial?.reviews">
-                    <div>
-                        <div class="reviewer-box">
-                            <i class="ri-double-quotes-r"></i>
-                            <h3>{{ team?.title }}</h3>
-                            <p>"{{ team?.review }}"</p>
-                            <div class="reviewer-profile">
-                                <div class="reviewer-image">
-                                    <img [src]="storageURL + team?.profile_image_url" alt="image">
-                                </div>
-                                <div class="reviewer-name">
-                                    <h4>{{ team?.name }}</h4>
-                                    <h6>{{ team?.designation }}</h6>
+                <div class="slider-dots">
+                    <owl-carousel-o [options]="testimonialsOptions">
+                        <ng-template carouselSlide *ngFor="let team of aboutUs?.testimonial?.reviews">
+                            <div>
+                                <div class="reviewer-box">
+                                    <i class="ri-double-quotes-r"></i>
+                                    <h3>{{ team?.title }}</h3>
+                                    <p>"{{ team?.review }}"</p>
+                                    <div class="reviewer-profile">
+                                        <div class="reviewer-image">
+                                            <img [src]="storageURL + team?.profile_image_url" alt="image">
+                                        </div>
+                                        <div class="reviewer-name">
+                                            <h4>{{ team?.name }}</h4>
+                                            <h6>{{ team?.designation }}</h6>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    </ng-template>
-                </owl-carousel-o>
+                        </ng-template>
+                    </owl-carousel-o>
                 </div>
             </div>
         </div>
@@ -195,30 +325,27 @@
                 <div class="slider-dots">
                     <owl-carousel-o [options]="blogOptions">
                         <ng-template carouselSlide *ngFor="let blog of blogs">
-                        <div >
-                            <div class="blog-box">
-                                <div class="blog-box-image">
-                                    <div class="blog-image">
-                                        <a [routerLink]="['/blog/', blog.slug]">
-                                        <img [src]="blog.blog_thumbnail.original_url
+                            <div>
+                                <div class="blog-box">
+                                    <div class="blog-box-image">
+                                        <div class="blog-image">
+                                            <a [routerLink]="['/blog/', blog.slug]">
+                                                <img [src]="blog.blog_thumbnail.original_url
                                                 ? blog.blog_thumbnail.original_url
                                                 : 'assets/images/blog.png'" [alt]="blog.title">
-                                        </a>
+                                            </a>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <a [routerLink]="['/blog/', blog.slug]" class="blog-detail d-block">
-                                    <h6>{{ blog.created_by.name }}</h6>
-                                    <h5>{{ blog.title }}</h5>
-                                </a>
+                                    <a [routerLink]="['/blog/', blog.slug]" class="blog-detail d-block">
+                                        <h6>{{ blog.created_by.name }}</h6>
+                                        <h5>{{ blog.title }}</h5>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
                         </ng-template>
                     </owl-carousel-o>
-                    <app-no-data
-                    [class]="'no-data-added bg-light'"
-                    [text]="'no_blog_found'"
-                    *ngIf="!blogs?.length">
+                    <app-no-data [class]="'no-data-added bg-light'" [text]="'no_blog_found'" *ngIf="!blogs?.length">
                     </app-no-data>
                 </div>
             </div>

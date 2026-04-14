@@ -12,29 +12,30 @@ import { ThemeOptionService } from '../../../../services/theme-option.service';
   styleUrl: './digital-product-box.component.scss'
 })
 export class DigitalProductBoxComponent {
-  
+
   @Input() class: string;
   @Input() close: boolean;
   @Input() product: Product;
-   
-  @Select(WishlistState.wishlistIds) wishlistIds$: Observable<number[]>;
-  
-  public wishlistIds: number[];
- 
-  constructor(private store: Store, public themeOptionService: ThemeOptionService){}
+  @Input() lazy: boolean = false;
 
-  ngOnInit(){
+  @Select(WishlistState.wishlistIds) wishlistIds$: Observable<number[]>;
+
+  public wishlistIds: number[];
+
+  constructor(private store: Store, public themeOptionService: ThemeOptionService) { }
+
+  ngOnInit() {
   }
 
-  addToWishlist(product: Product){
+  addToWishlist(product: Product) {
     product['is_wishlist'] = !product['is_wishlist'];
-    let action = product['is_wishlist']? new AddToWishlist({ product_id: product.id }) : new DeleteWishlist(product.id);
-    if(action){
+    let action = product['is_wishlist'] ? new AddToWishlist({ product_id: product.id }) : new DeleteWishlist(product.id);
+    if (action) {
       this.store.dispatch(action);
     }
   }
 
-  removeWishlist(id: number){
+  removeWishlist(id: number) {
     this.store.dispatch(new DeleteWishlist(id));
   }
 }

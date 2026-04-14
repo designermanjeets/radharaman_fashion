@@ -1,15 +1,26 @@
 User-agent: *
 Allow: /
 
-# Sitemap
-Sitemap: https://radharamanfashion.in/sitemap.xml
+# Allow important assets for Angular rendering
+Allow: *.css
+Allow: *.js
+Allow: *.png
+Allow: *.jpg
+Allow: *.jpeg
+Allow: *.gif
+Allow: *.svg
+Allow: *.ico
+Allow: *.woff
+Allow: *.woff2
+Allow: *.ttf
+Allow: *.eot
 
-# Disallow admin and private areas
+# Disallow private or unnecessary pages
+Disallow: /auth/
+Disallow: /account/
 Disallow: /admin/
 Disallow: /private/
 Disallow: /api/
-Disallow: /_next/
-Disallow: /static/
 
 # Allow important pages
 Allow: /about-us
@@ -18,6 +29,5 @@ Allow: /blog
 Allow: /products
 Allow: /categories
 
-# Crawl delay (optional)
-Crawl-delay: 1
-
+# Sitemap
+Sitemap: https://radharamanfashion.in/sitemap.xml

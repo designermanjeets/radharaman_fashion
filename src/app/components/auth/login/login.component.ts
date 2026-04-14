@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { Store, Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { Meta } from '@angular/platform-browser';
 import { Cart, CartAddOrUpdate } from '../../../shared/interface/cart.interface';
 import { Login } from '../../../shared/action/auth.action';
 import { Breadcrumb } from '../../../shared/interface/breadcrumb';
@@ -33,8 +34,10 @@ export class LoginComponent {
     private store: Store,
     private router: Router,
     private formBuilder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private meta: Meta
   ) {
+    this.meta.updateTag({ name: 'robots', content: 'noindex, nofollow' });
     this.form = this.formBuilder.group({
       email: new FormControl('', [
         Validators.required, 

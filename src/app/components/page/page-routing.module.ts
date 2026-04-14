@@ -35,6 +35,11 @@ const routes: Routes = [
     component: OfferComponent
   },
   {
+    path: 'page/about-us',
+    redirectTo: 'about-us',
+    pathMatch: 'full'
+  },
+  {
     path: 'about-us',
     component: AboutUsComponent
   },
