@@ -86,7 +86,7 @@ export class SettingState {
 
               {
                 name: 'starpaisa_radha',
-                status: true,
+                status: false,
                 title: 'PAY BY UPI INTENT',
               },
               {
