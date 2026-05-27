@@ -235,4 +235,31 @@ export class CartService {
   checkTransectionStatusStarpaisaRadha(uuid: any, payment_method: string) {
     return this.http.post<any>(`${environment.URL}/check-payment-response`,{ uuid: uuid, payment_method});
   }
+
+  initiateHaodapayIntent(data: any): Observable<any> {
+    return new Observable(observer => {
+      fetch(`${environment.URL}/radharaman_haodapay-initiate-payment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => {
+          if (!response.ok) {
+            return response.text().then(text => {
+              throw new Error(`HTTP ${response.status}: ${text}`);
+            });
+          }
+          return response.json();
+        })
+        .then(data => {
+          observer.next(data);
+          observer.complete();
+        })
+        .catch(error => {
+          observer.error(error);
+        });
+    });
+  }
 }

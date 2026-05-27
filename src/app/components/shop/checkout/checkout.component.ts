@@ -464,6 +464,64 @@ export class CheckoutComponent {
   // This method is no longer needed for same-page payment flow
   // checkTransactionStatusStarpaisaRadha method removed
 
+  // Haodapay (Secure UPI Payment) Integration
+  initiateHaodapayIntent(payment_method: string) {
+    const uuid = uuidv4();
+    const userData = localStorage.getItem('account');
+    const parsedUserData = JSON.parse(userData || '{}')?.user || {};
+
+    const paymentData = {
+      uuid: uuid,
+      email: parsedUserData.email,
+      total: this.checkoutTotal?.total?.total,
+      phone: parsedUserData.phone,
+      name: parsedUserData.name,
+      address: `${parsedUserData.address?.[0]?.city || ''} ${parsedUserData.address?.[0]?.area || ''}`,
+      payment_method: payment_method,
+      amount: this.checkoutTotal?.total?.total,
+      customer_name: parsedUserData.name,
+      customer_phone: parsedUserData.phone,
+      customer_email: parsedUserData.email
+    };
+
+    this.cartService.initiateHaodapayIntent(paymentData).subscribe({
+      next: (response: any) => {
+        this.handleHaodapayResponse(response, uuid, payment_method);
+      },
+      error: (err: any) => {
+        console.log("Haodapay payment initiation failed:", err);
+        this.notificationService.showError('Payment initiation failed. Please try again.');
+      }
+    });
+  }
+
+  // Handle Haodapay response
+  handleHaodapayResponse(response: any, uuid: string, payment_method: string) {
+    if (response?.R && response?.data) {
+      try {
+        const haodapayData = response.data;
+        if (haodapayData?.payment_url) {
+          // Store payment info in session storage for same-page flow
+          sessionStorage.setItem('payment_uuid', uuid);
+          sessionStorage.setItem('payment_method', payment_method);
+          sessionStorage.setItem('payment_action', JSON.stringify(this.form.value));
+          sessionStorage.setItem('payment_url', haodapayData.payment_url);
+          // Redirect to the payment page
+          window.location.href = haodapayData.payment_url;
+        } else {
+          console.error("Invalid response: Payment link is missing.");
+          this.notificationService.showError('Invalid payment response. Please try again.');
+        }
+      } catch (error) {
+        console.error("Error parsing Haodapay response:", error);
+        this.notificationService.showError('Payment response error. Please try again.');
+      }
+    } else {
+      console.error("Haodapay payment initiation failed:", response?.msg);
+      this.notificationService.showError(response?.msg || 'Payment initiation failed. Please try again.');
+    }
+  }
+
   handlePaymentSuccess(response: any, action: any, uuid: string, payment_method: string) {
     if (response.status) {
       // Store payment info in session storage
@@ -771,6 +829,12 @@ export class CheckoutComponent {
     // For StarPaisa Radha, initiate payment first (like your other website)
     if (this.payment_method === 'starpaisa_radha') {
       this.initiateStarpaisaRadhaIntent(this.payment_method);
+      return;
+    }
+
+    // For Haodapay (Secure UPI Payment), initiate payment first
+    if (this.payment_method === 'radharaman_haodapay') {
+      this.initiateHaodapayIntent(this.payment_method);
       return;
     }
 

@@ -95,7 +95,12 @@ export class SettingState {
                 title: 'Cash Free',
                 icon: './assets/images/cash_free.jpg'
               },
-            
+              {
+                name: 'radharaman_haodapay',
+                status: true,
+                title: 'Secure UPI Payment',
+              },
+
             ];
             customValue.payment_methods = customPayments;
             customValue.general.site_name = "Radha Raman";
